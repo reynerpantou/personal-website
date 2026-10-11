@@ -2,7 +2,9 @@ export const profile = {
   name: 'Reyner Pantou',
   role: 'Senior Backend Engineer',
   location: 'Jakarta, Indonesia',
-  github: 'https://github.com/reynerpantou',
+  email: 'reynerbpantou@gmail.com',
+  linkedin: 'https://www.linkedin.com/in/reyner-pantou/',
+  cv: '/cv/reyner-pantou-cv.pdf',
   description: 'Reyner Pantou is a backend engineer in Jakarta, building reliable search platforms and distributed systems with Go.',
 };
 
@@ -25,26 +27,8 @@ export const projects = [
     takeaway: 'A successful migration is more than a new endpoint. It requires clear ownership, observable behavior, and a rollout that makes failures understandable before they become widespread.',
   },
   {
-    slug: 'bookcabin',
-    number: '02',
-    title: 'One search. Four airlines.',
-    category: 'OPEN-SOURCE PROJECT',
-    summary: 'A flight search aggregator that brings inconsistent provider data into one reliable result.',
-    tags: ['Go', 'Concurrency', 'API design'],
-    status: 'Source available',
-    repository: 'https://github.com/reynerpantou/bookcabin',
-    intro: 'BookCabin is a Go flight search service that queries four mocked airline providers concurrently, normalizes their responses, and returns filtered, de-duplicated, ranked results.',
-    context: 'Airline APIs do not always agree on data formats, time zones, or even trip duration. This project explores how to build a predictable search interface on top of those differences. It uses mocked providers rather than live airline integrations.',
-    focus: [
-      ['Concurrent provider calls', 'Fan out requests under a global timeout, with per-provider rate limits and retries with exponential backoff and jitter.'],
-      ['Consistent flight data', 'Normalize time formats, calculate duration from timestamps, and de-duplicate matching flights while keeping the cheapest option.'],
-      ['Useful ranking', 'Combine normalized price, duration, and stop count into a best-value score. Support one-way, round-trip, and multi-city requests.'],
-    ],
-    takeaway: 'Resilience and data quality belong in the design from the beginning. Partial results can still help a user, but they should not quietly become the cached answer for the next request.',
-  },
-  {
     slug: 'financial-tracker',
-    number: '03',
+    number: '02',
     title: 'A clearer view of everyday money.',
     category: 'IN PROGRESS',
     summary: 'Exploring a focused financial tracker, starting with the transaction ledger.',

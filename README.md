@@ -1,6 +1,6 @@
 # Reyner Pantou — Personal Website
 
-A professional, English-language portfolio with an editorial layout, warm off-white palette, muted blue accents, and locally hosted Inter. Built with Astro and Tailwind CSS, output as static HTML for Cloudflare Workers Static Assets.
+An English-language professional portfolio built with Astro and Tailwind CSS. All pages are generated as static HTML for **Cloudflare Pages**, with warm off-white, muted blue, and locally hosted Inter.
 
 ## Run locally
 
@@ -13,23 +13,40 @@ npm run dev
 
 ```sh
 npm run check   # Astro and TypeScript checks
-npm test        # Build, then verify routes, metadata, links, and fragments
-npm run preview # Preview the production build locally
+npm test        # Build and validate the generated site
+npm run preview # Preview the static production build
 ```
 
-## Structure and content
+## Content
 
-- `src/data/site.ts`: profile, project descriptions, and case study content.
-- `src/pages/index.astro`: introduction, selected work, experience, writing, about, and contact.
-- `src/pages/work/[slug].astro`: static project detail pages.
-- `src/pages/writing/`: engineering notes, starting with the BookCabin cache design.
-- `src/layouts/Base.astro`: navigation, metadata, structured data, and footer.
-- `src/styles/global.css`: design tokens, responsive layout, and reduced-motion support.
-- `public/`: favicon, social preview image, robots file, and response headers.
+- `src/data/site.ts`: profile, verified email and LinkedIn, and work descriptions.
+- `src/pages/index.astro`: introduction, selected work, experience, CV, about, and contact.
+- `src/pages/work/[slug].astro`: professional work and ongoing personal project detail pages.
+- `src/pages/cv.astro`: embedded CV viewer with direct-open and download fallbacks.
+- `public/cv/reyner-pantou-cv.pdf`: the original uploaded CV, served as a static file.
+- `src/layouts/Base.astro`: navigation, search and social metadata, and footer.
+- `src/styles/global.css`: responsive layouts, design tokens, focus styles, and reduced-motion support.
 
-Professional work is described at a high level without internal performance or business metrics. BookCabin uses mocked providers; the financial tracker is explicitly marked as work in progress. Contact currently links to the verified GitHub profile. Add email, LinkedIn, a résumé, or a portrait only after the real assets and addresses are available.
+The portfolio excludes take-home assignments and public GitHub repository listings or links. The CV PDF is retained unchanged. Replace `public/cv/reyner-pantou-cv.pdf` with a newer PDF to update every CV link and the embedded viewer in the next build. Keep this filename stable.
 
-## Deploy to Cloudflare
+## Deploy on Cloudflare Pages
+
+In Cloudflare, choose **Workers & Pages → Create application → Pages → Connect to Git**, then select this repository.
+
+| Setting | Value |
+| --- | --- |
+| Production branch | `main` |
+| Framework preset | `Astro` |
+| Build command | `npm run build` |
+| Build output directory | `dist` |
+| Root directory | Repository root |
+| Node version | `24` (`.node-version`, or build variable `NODE_VERSION=24`) |
+
+The implementation is currently on `feat/professional-portfolio` for review; merge the pull request to `main` before the first production deployment. Cloudflare Pages can create previews for this branch once Git integration is connected.
+
+There are no Pages Functions, server-rendered routes, or Worker entrypoints. `astro.config.mjs` explicitly uses `output: 'static'`; Cloudflare serves only generated files from `dist/`. The output includes `404.html` for normal static-site 404 behavior rather than a single-page-app fallback, plus `_headers` for response headers. Same-origin framing is allowed so the CV can be embedded.
+
+Optional direct upload, after creating a Pages project named `reyner-personal-website`:
 
 ```sh
 npm run build
@@ -37,20 +54,14 @@ npx wrangler login
 npm run deploy
 ```
 
-`wrangler.jsonc` serves `dist/` directly, with trailing-slash handling and a custom 404 page. No database, server runtime, or Cloud Run service is needed for this portfolio.
+The deploy script uses `wrangler pages deploy`, not Worker deployment. Adjust its project name if your Pages project uses a different name. Git integration is the recommended route for automatic deployment on future commits.
 
-For Git-connected Cloudflare Workers builds:
+After the Pages deployment succeeds, open its **Custom domains** tab and add `reynerpantou.com`. Configure the apex domain through that Pages flow. Project subdomains can be managed separately.
 
-- Build command: `npm run build`
-- Deploy command: `npx wrangler deploy`
-- Root directory: repository root
-
-Once the Worker exists, add `reynerpantou.com` as a custom domain in its Cloudflare dashboard. Project subdomains can be configured independently; this repository owns the personal landing page only. No domain or hosting account configuration is performed by this change.
-
-The canonical site URL is defined in `astro.config.mjs`; update that and `public/robots.txt` if the domain changes. Social metadata uses `public/social-card.png`, with the editable SVG source alongside it.
+The canonical URL is in `astro.config.mjs`; update that and `public/robots.txt` if the domain changes. Social previews use `public/social-card.png` with the editable SVG alongside it.
 
 ## Verification
 
-GitHub Actions runs type checks, a production build, and generated-site tests. The tests check every page’s English language attribute, heading and main landmark, metadata, structured data, internal paths, anchor links, and local assets. They do not replace visual browser review or Lighthouse measurements; Core Web Vitals and WCAG conformance are not claimed without measurement.
+GitHub Actions runs type checking, the production build, and generated-site tests. Tests validate English page metadata, landmarks, internal paths, fragments, local assets, and CV viewing/download links; verify the PDF is copied unchanged; check excluded work stays absent; and verify static output has no Worker entrypoints or client JavaScript.
 
-Design choices include native anchor navigation, visible keyboard focus, a skip link, semantic landmarks, responsive grids, and reduced-motion handling. No client-side JavaScript is needed for the portfolio.
+Browser visual QA and Lighthouse measurements are still needed before claiming measured accessibility conformance or Core Web Vitals results.

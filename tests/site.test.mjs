@@ -20,8 +20,8 @@ for (const file of files.filter(file => file.endsWith('.html'))) {
   pages.set(path, nodes(parse(await readFile(file, 'utf8'))));
 }
 
-test('all portfolio and writing routes are emitted', () => {
-  for (const route of ['/', '/work/commerce-search/', '/work/bookcabin/', '/work/financial-tracker/', '/writing/caching-partial-results/', '/404.html']) {
+test('all portfolio and CV routes are emitted', () => {
+  for (const route of ['/', '/work/commerce-search/', '/work/financial-tracker/', '/cv/', '/404.html']) {
     assert.ok(pages.has(route), `Missing ${route}`);
   }
 });
@@ -42,9 +42,9 @@ for (const [route, elements] of pages) {
 
   test(`${route}: navigation, fragments, and local assets resolve`, () => {
     for (const node of elements) {
-      for (const attribute of ['href', 'src']) {
+      for (const attribute of ['href', 'src', 'data']) {
         const value = attr(node, attribute);
-        if (!value || /^(mailto:|tel:|data:)/.test(value)) continue;
+        if (!value || (attribute === 'data' && node.tagName !== 'object') || /^(mailto:|tel:|data:)/.test(value)) continue;
         const url = new URL(value, origin + route);
         if (url.origin !== origin) continue;
         const target = pages.get(url.pathname);
@@ -61,9 +61,37 @@ for (const [route, elements] of pages) {
 
 test('homepage exposes every section and labels unfinished work', () => {
   const home = pages.get('/');
-  for (const id of ['work', 'experience', 'writing', 'about', 'contact']) assert.ok(home.some(node => attr(node, 'id') === id));
+  for (const id of ['work', 'experience', 'resume', 'about', 'contact']) assert.ok(home.some(node => attr(node, 'id') === id));
   const project = pageText(pages.get('/work/financial-tracker/'));
   assert.match(project, /work in progress, not a released product/);
+});
+
+test('excluded work and public repository links are absent from generated pages', async () => {
+  assert.ok(!pages.has('/work/bookcabin/'));
+  assert.ok(!pages.has('/writing/caching-partial-results/'));
+  for (const file of files.filter(file => /\.(html|xml)$/.test(file))) {
+    assert.doesNotMatch(await readFile(file, 'utf8'), /bookcabin|github\.com\/reynerpantou/i);
+  }
+});
+
+test('the CV is a real PDF copied unchanged and has view/download links', async () => {
+  const original = await readFile('public/cv/reyner-pantou-cv.pdf');
+  const deployed = await readFile(join(root, 'cv/reyner-pantou-cv.pdf'));
+  assert.equal(deployed.subarray(0, 5).toString(), '%PDF-');
+  assert.deepEqual(deployed, original);
+  const cv = pages.get('/cv/');
+  assert.ok(cv.some(node => node.tagName === 'object' && attr(node, 'data') === '/cv/reyner-pantou-cv.pdf' && attr(node, 'type') === 'application/pdf'));
+  assert.ok(cv.some(node => node.tagName === 'a' && attr(node, 'href') === '/cv/reyner-pantou-cv.pdf' && attr(node, 'download')));
+});
+
+test('Cloudflare Pages output is static and allows the CV to embed on the same origin', async () => {
+  assert.ok(files.includes(join(root, '404.html')));
+  assert.ok(files.includes(join(root, '_headers')));
+  assert.match(await readFile(join(root, '_headers'), 'utf8'), /X-Frame-Options: SAMEORIGIN/);
+  assert.ok(!files.some(file => /(?:^|[/\\])(?:_worker\.js|functions|server)(?:[/\\]|$)/.test(relative(root, file))));
+  for (const elements of pages.values()) {
+    assert.ok(!elements.some(node => node.tagName === 'script' && attr(node, 'type') !== 'application/ld+json'));
+  }
 });
 
 function pageText(elements) { return elements.filter(node => node.nodeName === '#text').map(node => node.value).join(' '); }

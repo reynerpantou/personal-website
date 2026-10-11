@@ -11,8 +11,7 @@ const nextProject = projects[(projects.findIndex(item => item.slug === project.s
 <Base title={project.title} description={project.summary}>
   <article class="detail-page">
     <a class="back-link" href="/#work"><span aria-hidden="true">←</span> Selected work</a>
-    <header class="detail-header"><span class="eyebrow">{project.category} <span class="separator">/</span> {project.status}</span><h1>{project.title}</h1><p class="detail-intro">{project.intro}</p><ul class="tags">{project.tags.map(tag => <li>{tag}</li>)}</ul>{'repository' in project && <a class="button button-primary" href={project.repository} target="_blank" rel="noopener noreferrer">Explore the source <Arrow diagonal /><span class="sr-only"> (opens in a new tab)</span></a>}</header>
-    {project.slug === 'bookcabin' && <figure class="flow-figure"><div class="flow-input">Search request</div><div class="flow-providers"><span>AirAsia</span><span>Batik Air</span><span>Garuda</span><span>Lion Air</span></div><div class="flow-output">Normalize <span aria-hidden="true">→</span> Filter <span aria-hidden="true">→</span> Rank</div><figcaption>Four mocked providers. One consistent result model.</figcaption></figure>}
+    <header class="detail-header"><span class="eyebrow">{project.category} <span class="separator">/</span> {project.status}</span><h1>{project.title}</h1><p class="detail-intro">{project.intro}</p><ul class="tags">{project.tags.map(tag => <li>{tag}</li>)}</ul></header>
     <section class="detail-section"><h2>The context</h2><p>{project.context}</p></section>
     <section class="detail-section"><h2>The engineering focus</h2><div class="focus-list">{project.focus.map(([title, body], index) => <div class="focus-item"><span class="eyebrow">0{index + 1}</span><div><h3>{title}</h3><p>{body}</p></div></div>)}</div></section>
     <section class="detail-section takeaway"><span class="eyebrow">THE TAKEAWAY</span><p>{project.takeaway}</p></section>

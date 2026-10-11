@@ -6,7 +6,7 @@ interface Props { title?: string; description?: string; home?: boolean; noindex?
 const { title, description = profile.description, home = false, noindex = false, canonicalPath } = Astro.props;
 const pageTitle = title ? `${title} — ${profile.name}` : `${profile.name} — Backend Engineer`;
 const canonical = new URL(canonicalPath ?? Astro.url.pathname, Astro.site);
-const links = [{ label: 'Work', id: 'work' }, { label: 'Experience', id: 'experience' }, { label: 'Writing', id: 'writing' }, { label: 'About', id: 'about' }];
+const links = [{ label: 'Work', id: 'work' }, { label: 'Experience', id: 'experience' }, { label: 'CV', id: 'resume' }, { label: 'About', id: 'about' }];
 ---
 <!doctype html>
 <html lang="en">
@@ -29,7 +29,7 @@ const links = [{ label: 'Work', id: 'work' }, { label: 'Experience', id: 'experi
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Reyner Pantou — Making complex systems feel simple." />
     <meta name="twitter:card" content="summary_large_image" />
-    <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@type': 'Person', name: profile.name, url: Astro.site, jobTitle: profile.role, sameAs: [profile.github] })} />
+    <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@type': 'Person', name: profile.name, url: Astro.site, jobTitle: profile.role, sameAs: [profile.linkedin] })} />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -46,7 +46,7 @@ const links = [{ label: 'Work', id: 'work' }, { label: 'Experience', id: 'experi
     <footer class="shell footer">
       <p>© {new Date().getFullYear()} Reyner Pantou</p>
       <p>Built with care. Kept simple.</p>
-      <a href={profile.github} target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
+      <a href={`mailto:${profile.email}`}>Email <span aria-hidden="true">↗</span></a>
     </footer>
   </body>
 </html>
