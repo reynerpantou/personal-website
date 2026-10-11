@@ -67,12 +67,34 @@ test('homepage exposes every section and describes delivered ownership', () => {
   assert.match(pageText(home), /Search Pack.*item and component packer/is);
   assert.match(pageText(home), /Limited ingestion-service contributions/i);
   assert.doesNotMatch(pageText(home), /technical owner of Tokopedia’s Search Result Page/i);
-  assert.match(pageText(home), /May vs\. April, 2024/);
+  assert.match(pageText(home), /May vs\. April 2024/);
+  assert.match(pageText(home), /High-value-user coupon experiment/);
+  assert.match(pageText(home), /Combined team program/);
+  assert.match(pageText(home), /results are not cumulative/);
+  assert.doesNotMatch(pageText(home), /Code reviews in 2023|Architecture Review Board presentations|My service scope at TikTok|What I’m responsible for/);
   const migration = pageText(pages.get('/work/search-platform-migration/'));
   assert.match(migration, /1,200 ms to 850 ms/);
   assert.match(migration, /What I owned/);
   assert.match(migration, /Business impact/);
   assert.match(migration, /Technical impact/);
+});
+
+test('experience explanations remain accessible without JavaScript and the portrait is local', () => {
+  const home = pages.get('/');
+  const details = home.filter(node => node.tagName === 'details');
+  assert.ok(details.length > 0);
+  for (const detail of details) {
+    assert.equal(attr(detail, 'open'), undefined, 'Details start compact');
+    const children = nodes(detail);
+    assert.ok(children.some(node => node.tagName === 'summary'));
+    assert.ok(children.some(node => attr(node, 'class') === 'info-panel' && pageText(nodes(node)).trim().length > 20));
+  }
+  const portrait = home.find(node => node.tagName === 'img');
+  assert.equal(attr(portrait, 'src'), '/reyner-pantou.webp');
+  assert.equal(attr(portrait, 'alt'), 'Portrait of Reyner Pantou');
+  assert.equal(attr(portrait, 'width'), '400');
+  assert.equal(attr(portrait, 'height'), '400');
+  assert.ok(home.some(node => node.tagName === 'a' && attr(node, 'href') === 'https://www.linkedin.com/in/reyner-pantou/'));
 });
 
 test('only approved pages are published and public repository links are absent', async () => {
@@ -102,8 +124,10 @@ test('Cloudflare Pages output is static and allows the CV to embed on the same o
   assert.ok(files.includes(join(root, '_headers')));
   assert.match(await readFile(join(root, '_headers'), 'utf8'), /X-Frame-Options: SAMEORIGIN/);
   assert.ok(!files.some(file => /(?:^|[/\\])(?:_worker\.js|functions|server)(?:[/\\]|$)/.test(relative(root, file))));
-  for (const elements of pages.values()) {
-    assert.ok(!elements.some(node => node.tagName === 'script' && attr(node, 'type') !== 'application/ld+json'));
+  for (const [route, elements] of pages) {
+    const interactive = elements.filter(node => node.tagName === 'script' && attr(node, 'type') !== 'application/ld+json');
+    assert.equal(interactive.length, route === '/' ? 1 : 0, 'Only the homepage details interaction needs JavaScript');
+    for (const script of interactive) assert.equal(attr(script, 'type'), 'module');
   }
 });
 
@@ -119,7 +143,7 @@ test('text colors meet WCAG AA contrast on neutral and colored surfaces', async 
   assert.ok(contrast(tokens.background, tokens.accent) >= 4.5, 'Primary button label contrast');
 });
 
-test('homepage HTML, CSS, and one local font stay below 100 KiB combined', async () => {
+test('homepage assets stay lightweight with one local portrait and a small details script', async () => {
   const home = pages.get('/');
   const stylesheets = home.filter(node => node.tagName === 'link' && attr(node, 'rel') === 'stylesheet');
   assert.ok(stylesheets.length > 0, 'The homepage should have a stylesheet');
@@ -139,8 +163,25 @@ test('homepage HTML, CSS, and one local font stay below 100 KiB combined', async
   }
   assert.equal(fonts.size, 1, 'Only one variable font should be shipped');
   for (const font of fonts) total += (await readFile(join(root, font))).length;
-  assert.ok(total < 100 * 1024, `Homepage assets total ${total} bytes`);
-  assert.ok(!home.some(node => node.tagName === 'img' || node.tagName === 'video'), 'No large media dependencies on the homepage');
+  let scriptBytes = 0;
+  for (const node of home.filter(node => node.tagName === 'script' && attr(node, 'type') === 'module')) {
+    const source = attr(node, 'src');
+    if (source) {
+      const url = new URL(source, origin);
+      assert.equal(url.origin, origin);
+      const bytes = (await readFile(join(root, url.pathname))).length;
+      scriptBytes += bytes; total += bytes;
+    } else scriptBytes += Buffer.byteLength(pageText(nodes(node)));
+  }
+  assert.ok(scriptBytes < 3 * 1024, `Details script totals ${scriptBytes} bytes`);
+  assert.ok(total < 100 * 1024, `HTML, CSS, font and script total ${total} bytes`);
+  const images = home.filter(node => node.tagName === 'img');
+  assert.equal(images.length, 1, 'Only the requested portrait is loaded');
+  const photoBytes = (await readFile(join(root, attr(images[0], 'src')))).length;
+  assert.ok(photoBytes < 35 * 1024, `Portrait totals ${photoBytes} bytes`);
+  total += photoBytes;
+  assert.ok(total < 135 * 1024, `All homepage assets total ${total} bytes`);
+  assert.ok(!home.some(node => node.tagName === 'video'));
 });
 
 function luminance(hex) {

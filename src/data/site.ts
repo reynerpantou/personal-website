@@ -6,7 +6,7 @@ export const profile = {
   linkedin: 'https://www.linkedin.com/in/reyner-pantou/',
   cv: '/cv/reyner-pantou-cv.pdf',
   description: 'Senior backend engineer specialising in the user-facing search API layer: Search API, Search Provider for engine aggregation, and Search Pack for item and component packing. Five years at Tokopedia and ByteDance with Go.',
-  introduction: 'Five years at Tokopedia and ByteDance. I owned the user-facing search API layer at TikTok: Search API, Search Provider for engine aggregation, and Search Pack for item and component packing. My responsibility ran from service design and stakeholder alignment through implementation, rollout, and monitoring.',
+  introduction: 'Five years at Tokopedia and ByteDance. I owned the user-facing search API layer, connecting organic and advertising engines to shopping experiences—from service design and integration through rollout, governance, and monitoring.',
 };
 
 export const serviceScope = [
@@ -16,19 +16,21 @@ export const serviceScope = [
 ];
 
 export const highlights = [
-  { value: '+18.5%', label: 'Reported search GMV growth', context: 'May vs. April, 2024 integration' },
-  { value: '−55%', label: 'Annual search API hosting cost', context: '2025 migration, rounded from 54.68%' },
-  { value: '14+', label: 'Squads coordinated', context: '2023 legacy API migration' },
-];
-
-export const responsibilities = [
-  ['API-layer ownership', 'Define contracts and service boundaries for Search API, Search Provider, and Search Pack, and remain accountable from design review through rollout.'],
-  ['Search experience', 'Integrate organic and ad engines, filters, sorting, product/video/store cards, and promotion display, popups, and claims.'],
-  ['Tracking and governance', 'Handle engine impressions and event tracking, blacklists, interventions, and product-status and moderation handling.'],
-  ['Architecture and delivery', 'Separate API orchestration, engine aggregation, and component packing, and plan migrations with testing and rollback paths.'],
-  ['Cross-team execution', 'Align Product, Backend, Frontend, QA, Data Science, Ads, and platform teams on dependencies, delivery plans, and changing priorities.'],
-  ['Experiments and operations', 'Implement experiment controls and monitoring, operate rollouts, partner on result interpretation, and investigate production incidents.'],
-  ['Engineering leadership', 'Write technical designs, review code, mentor engineers, interview candidates, and share platform knowledge across teams.'],
+  { label: 'Commerce growth', summary: 'Search · Ads · Promotions', results: [
+    ['+18.5% search GMV', 'Integration, May vs. April 2024'],
+    ['+11.06% search GMV', 'High-value-user coupon experiment'],
+    ['+21.69% pseudo-ad DGMV', 'Separate 2025 ads experiment'],
+  ] },
+  { label: 'Operating efficiency', summary: 'Cost · Latency · Resources', results: [
+    ['$86.8K/year lower hosting cost', 'Search API migration, −54.68%'],
+    ['$24K/month Elasticsearch savings', 'Combined team program, −40%'],
+    ['350 ms lower page latency', 'Migration: 1,200 → 850 ms'],
+  ] },
+  { label: 'Production delivery', summary: 'Integration · Migration · Governance', results: [
+    ['Three API-layer services', 'Search API, Search Provider, Search Pack'],
+    ['Zero reported cutover downtime', 'API migration and provider transition'],
+    ['Urgent policy fix in under one hour', '2024 P0 incident response'],
+  ] },
 ];
 
 export const experience = [
@@ -36,12 +38,12 @@ export const experience = [
     company: 'ByteDance',
     role: 'Senior Software Engineer · Search',
     dates: '2024 — 2026',
-    scope: 'Search API, Search Provider, and Search Pack',
-    description: 'Owned the user-facing search API layer and its organic/ad engine integrations, ByteCloud migration, and commerce features. Coordinated service delivery with Product, Frontend, QA, Data Science, Ads, and platform teams.',
-    areas: [
-      'Search Provider: aggregate TikTok organic and advertising engines; handle engine impressions and event tracking.',
-      'Search API and Search Pack: filters and sorting; product, video, store, and advertising cards; promotion display, popups, and claims.',
-      'Governance: blacklists, interventions, and product-status and moderation handling.',
+    scope: 'User-facing search API layer',
+    description: 'Owned Search API, Search Provider, and Search Pack: organic/ad integration, cards, filters, sorting, promotions, tracking, and governance. Led the API-layer ByteCloud migration and service separation.',
+    details: [
+      ...serviceScope,
+      ['Experience & governance', 'Handled engine impressions and event tracking; promotion display, popups, and claims; filters and sorting; product, video, store, and advertising cards; blacklists, interventions, and product-status/moderation handling across the API layer.'],
+      ['Delivery & operations', 'Defined service boundaries and API contracts; aligned Product, Frontend, QA, Data Science, Ads, and platform teams; planned testing and rollback paths; operated experiments, rollout monitoring, and production incident response.'],
     ],
   },
   {
@@ -49,19 +51,14 @@ export const experience = [
     role: 'Software Engineer · Search',
     dates: '2021 — 2023',
     scope: 'Search APIs, retrieval, and relevance features',
-    description: 'Served as engineering PIC for search product-card redesign, Elasticsearch optimization, and migrations across more than 14 squads. Built reusable query and cache abstractions, strengthened integration testing, and supported production operations.',
-    areas: [
-      'Search APIs: product cards, advertisements, filters, sorting, and fine-ranking behavior across Search Result Page, store page, grocery, discovery, and other surfaces.',
-      'Retrieval, fine ranking with boost/deboost, NLP, and blacklist handling.',
-      'Limited ingestion-service contributions to process product information before Elasticsearch indexing.',
+    description: 'Delivered search APIs and relevance features across shopping surfaces. Engineering PIC for product-card redesign, Elasticsearch optimization initiatives, and downstream API migrations.',
+    details: [
+      ['Search surfaces', 'Handled product cards, advertisements, filters, sorting, and fine-ranking behavior across Search Result Page, store page, grocery, discovery, and other surfaces.'],
+      ['Retrieval & relevance', 'Worked on retrieval, fine-ranking boosts and deboosts, NLP, and blacklist handling.'],
+      ['Ingestion', 'Limited ingestion-service contributions to process product information before Elasticsearch indexing.'],
+      ['Delivery & quality', 'Coordinated migrations across more than 14 squads, built reusable query and cache abstractions, strengthened integration testing, and supported production operations.'],
     ],
   },
-];
-
-export const leadership = [
-  { value: '696', label: 'Code reviews in 2023' },
-  { value: '2', label: 'Architecture Review Board presentations' },
-  { value: '2025', label: 'ByteDance Spot Award' },
 ];
 
 export const projects = [
@@ -273,7 +270,7 @@ export const projects = [
     metrics: [
       { value: '14+', label: 'Squads coordinated', context: '2023 endpoint migration' },
       { value: '<1 hour', label: 'Urgent policy fix delivered', context: '2024 app-store compliance incident' },
-      { value: '696', label: 'Code reviews', context: '2023 calibration record' },
+      { value: '−19%', label: 'CPU utilization', context: '2025 cleanup, 20-host fleet' },
     ],
     business: [
       'Resolved a P0 search-content incident in under an hour; the performance record states that the fix prevented app-store blocking or removal.',
@@ -287,7 +284,7 @@ export const projects = [
     ownership: [
       'PIC for downstream migration planning and execution, following up consumers and tracking compatibility through production cutover.',
       'Main point of contact for the urgent content-policy fix and API-layer search governance: blacklists, interventions, and product-status and moderation handling.',
-      'Reviewed code, mentored engineers, interviewed backend candidates, and presented twice at the Architecture Review Board. Received a ByteDance Spot Award in 2025.',
+      'Reviewed code, mentored engineers, interviewed backend candidates, and contributed architecture reviews. Received a ByteDance Spot Award in 2025.',
     ],
     focus: [
       ['Migration as a program', 'Identified consumers, agreed timelines, tracked adoption, and communicated each production step.'],

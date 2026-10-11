@@ -19,7 +19,9 @@ npm run preview # Preview the static production build
 
 ## Content
 
-- `src/data/site.ts`: profile, verified contact details, career ownership, and six delivered workstreams with scoped business and technical metrics.
+- `src/data/site.ts`: profile, contact details, career-wide impact summaries, employer-specific ownership, and six delivered workstreams with scoped business and technical metrics.
+- `src/components/InlineInfo.astro`: compact native details for responsibility explanations, enhanced with hover, keyboard focus, Escape dismissal, and viewport-aware floating panels.
+- `public/reyner-pantou.webp`: optimized local portrait provided by Reyner, independent of the expiring LinkedIn media URL.
 - `src/pages/index.astro`: introduction, selected work, experience, CV, about, and contact.
 - `src/pages/work/[slug].astro`: professional work and ongoing personal project detail pages.
 - `src/pages/cv.astro`: embedded CV viewer with direct-open and download fallbacks.
@@ -66,8 +68,10 @@ The canonical URL is in `astro.config.mjs`; update that and `public/robots.txt` 
 
 ## Verification
 
-GitHub Actions runs type checking, the production build, and generated-site tests. Tests validate English page metadata, landmarks, internal paths, fragments, local assets, and CV viewing/download links; verify the PDF is copied unchanged; check excluded work stays absent; and verify static output has no Worker entrypoints or client JavaScript.
+GitHub Actions runs type checking, the production build, and generated-site tests. Tests validate English page metadata, landmarks, internal paths, fragments, local assets, and CV viewing/download links; verify the PDF is copied unchanged; check excluded work stays absent; and verify static output has no Worker entrypoints. Only the homepage ships a small details-interaction script; the case studies and CV pages need no client JavaScript.
 
-The layout uses flexible grids and wrapping navigation, with a mobile breakpoint at 700px. Body text stays at 16px, links have visible keyboard focus, navigation and action links have touch targets of at least 44px, and reduced-motion preferences disable transitions. There is no client JavaScript, animation loop, external font request, or image download on the homepage. Tailwind was removed because the design uses custom CSS throughout.
+The layout uses flexible grids and wrapping navigation, with compact work cards in three desktop columns, two tablet columns, and one mobile column. Body text stays at 16px; links and detail controls have visible keyboard focus; navigation, actions, and detail controls have touch targets of at least 44px. Reduced-motion preferences disable transitions. Responsibility explanations are embedded in the employer experience: hover or keyboard focus shows floating content on desktop, and native details support tap/click and work without JavaScript. On mobile, opened explanations appear within the page flow. Escape and outside clicks dismiss enhanced panels.
 
-Tests also enforce WCAG AA contrast ratios for text colors on neutral and colored surfaces and a 100 KiB combined budget for the homepage HTML, shared CSS, and font. These checks do not replace browser testing. Browser visual QA across phone, tablet, and desktop sizes and Lighthouse measurements are still needed before claiming measured accessibility conformance or Core Web Vitals results.
+There is no animation loop, external font request, or runtime service dependency. The local 400px WebP portrait is about 15 KB, and the details enhancement is under 3 KB. Tests keep HTML/CSS/font/script below 100 KiB and all homepage assets including the portrait below 135 KiB. Tailwind was removed because the design uses custom CSS throughout. The impact summary presents growth, cost, latency, and production outcomes from distinct initiatives without adding their percentages. Dated review/presentation counters are omitted.
+
+Tests also enforce WCAG AA contrast ratios for text colors on neutral and colored surfaces and the homepage asset budgets above. These checks do not replace browser testing. Browser visual QA across phone, tablet, and desktop sizes and Lighthouse measurements are still needed before claiming measured accessibility conformance or Core Web Vitals results.

@@ -1,0 +1,49 @@
+---
+interface Props { title: string; body: string }
+const { title, body } = Astro.props;
+---
+<details class="inline-info">
+  <summary>{title}<span class="info-mark" aria-hidden="true">?</span></summary>
+  <div class="info-panel"><p>{body}</p></div>
+</details>
+
+<script>
+  const hover = window.matchMedia('(hover: hover) and (pointer: fine)');
+  const items = [...document.querySelectorAll<HTMLDetailsElement>('.inline-info')];
+  for (const item of items) {
+    const summary = item.querySelector('summary')!;
+    const position = () => {
+      if (!item.open || window.innerWidth <= 700) return;
+      const panel = item.querySelector<HTMLElement>('.info-panel')!;
+      panel.style.left = '0px';
+      const rect = panel.getBoundingClientRect();
+      if (rect.right > window.innerWidth - 20) panel.style.left = `${window.innerWidth - 20 - rect.right}px`;
+      else if (rect.left < 20) panel.style.left = `${20 - rect.left}px`;
+    };
+    item.addEventListener('toggle', () => {
+      if (item.open) {
+        for (const other of items) if (other !== item) other.open = false;
+        position();
+      }
+    });
+    item.addEventListener('pointerenter', () => { if (hover.matches) item.open = true; });
+    item.addEventListener('pointerleave', () => {
+      if (hover.matches && !item.contains(document.activeElement)) item.open = false;
+    });
+    summary.addEventListener('focus', () => {
+      if (summary.matches(':focus-visible')) item.open = true;
+    });
+    item.addEventListener('focusout', event => {
+      if (!item.contains(event.relatedTarget as Node | null)) item.open = false;
+    });
+    item.addEventListener('keydown', event => {
+      if (event.key === 'Escape') { item.open = false; event.stopPropagation(); }
+    });
+  }
+  document.addEventListener('click', event => {
+    for (const item of items) if (!item.contains(event.target as Node)) item.open = false;
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') for (const item of items) item.open = false;
+  });
+</script>

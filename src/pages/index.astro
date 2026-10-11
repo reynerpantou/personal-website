@@ -2,7 +2,8 @@
 import Base from '../layouts/Base.astro';
 import Arrow from '../components/Arrow.astro';
 import WorkIcon from '../components/WorkIcon.astro';
-import { profile, projects, highlights, responsibilities, serviceScope, experience, leadership } from '../data/site';
+import InlineInfo from '../components/InlineInfo.astro';
+import { profile, projects, highlights, experience } from '../data/site';
 const toolkit = ['Go', 'Elasticsearch', 'Redis', 'PostgreSQL', 'Kafka', 'gRPC'];
 ---
 <Base home>
@@ -14,51 +15,33 @@ const toolkit = ['Go', 'Elasticsearch', 'Redis', 'PostgreSQL', 'Kafka', 'gRPC'];
       <p class="hero-description">{profile.introduction}</p>
       <div class="hero-actions"><a class="button button-primary" href="#work">Explore my work <Arrow /></a><a class="button button-secondary" href="/cv/">View CV <Arrow diagonal /></a></div>
     </div>
-    <aside class="profile-card" aria-label="Engineering focus">
-      <div class="file-bar"><span class="file-icon" aria-hidden="true">{'{ }'}</span><span>profile.go</span><span class="file-language">Go</span></div>
-      <pre aria-hidden="true"><code><span class="code-muted">// Ownership beyond the merge</span>
-<span class="code-keyword">engineer</span> := <span class="code-type">Engineer</span>{'{'}
-  Name:  <span class="code-string">"Reyner Pantou"</span>,
-  Owns: []<span class="code-type">string</span>{'{'}
-    <span class="code-string">"Search API"</span>,
-    <span class="code-string">"Search Provider"</span>,
-    <span class="code-string">"Search Pack"</span>,
-  {'}'},
-{'}'}</code></pre>
-      <p class="sr-only">My TikTok service ownership covered Search API, Search Provider for engine aggregation, and Search Pack for item and component packing.</p>
-      <div class="profile-note"><span aria-hidden="true">↳</span> Go · Search · Distributed systems</div>
-    </aside>
+    <figure class="portrait"><img src="/reyner-pantou.webp" alt="Portrait of Reyner Pantou" width="400" height="400" fetchpriority="high" decoding="async" /><figcaption>Go · Search APIs · Distributed systems</figcaption></figure>
     <div class="hero-history"><span class="eyebrow">Previously at</span><span><span class="company-tokopedia">Tokopedia</span> <span class="separator" aria-hidden="true">/</span> <span class="company-bytedance">ByteDance</span></span><span class="history-detail">2021 — 2026</span></div>
-    <dl class="highlight-grid" aria-label="Selected reported career outcomes">{highlights.map(item => <div><dt>{item.label}</dt><dd><span class="metric-value">{item.value}</span><p>{item.context}</p></dd></div>)}</dl>
+    <div class="career-impact" aria-label="Career impact across delivered initiatives">{highlights.map(item => <div><h2>{item.label}</h2><p class="impact-summary">{item.summary}</p><dl>{item.results.map(([result, scope]) => <div><dt>{result}</dt><dd>{scope}</dd></div>)}</dl></div>)}</div>
+    <p class="impact-scope">Selected outcomes across my career. Each figure belongs to its own initiative or experiment; results are not cumulative.</p>
   </section>
 
   <section id="work" class="section" aria-labelledby="work-title">
-    <div class="section-heading"><div><p class="eyebrow">01 / Selected work</p><h2 id="work-title">Work with measurable impact.</h2></div><p>Six delivered workstreams.<br class="desktop-break" /> Ownership, decisions, and results.</p></div>
-    <p class="section-intro">Reported outcomes from professional work at Tokopedia and ByteDance. Each case study explains my role and the scope of its metrics.</p>
+    <div class="section-heading"><div><p class="eyebrow">01 / Selected work</p><h2 id="work-title">Work with measurable impact.</h2></div><p>Six workstreams.<br class="desktop-break" /> Explore the decisions and results.</p></div>
     <div class="project-grid">
       {projects.map(project => <article class="project-card">
         <div class="project-top"><span class="project-icon"><WorkIcon kind={project.icon} /></span><span class="status">{project.category}</span></div>
         <h3><a class="project-title" href={`/work/${project.slug}/`}>{project.title}<Arrow diagonal /></a></h3>
         <p>{project.summary}</p>
-        <dl class="project-result"><dt>{project.metrics[0].label}</dt><dd><span>{project.metrics[0].value}</span><p>{project.metrics[0].context}</p></dd></dl>
-        <ul class="tags" aria-label="Engineering focus">{project.tags.map(tag => <li>{tag}</li>)}</ul>
-        <a class="text-link project-link" href={`/work/${project.slug}/`}>View case study <Arrow /><span class="sr-only">: {project.title}</span></a>
+        <p class="project-proof"><strong>{project.metrics[0].value}</strong> {project.metrics[0].label}<span>{project.metrics[0].context}</span></p>
       </article>)}
     </div>
   </section>
 
   <section id="experience" class="section" aria-labelledby="experience-title">
     <div class="section-heading"><div><p class="eyebrow">02 / Experience</p><h2 id="experience-title">Ownership through delivery.</h2></div><p>Architecture, execution,<br class="desktop-break" /> and production accountability.</p></div>
-    {experience.map(item => <article class="experience-row"><div class="experience-meta"><span class="experience-date">{item.dates}</span><span class="muted">{item.company}</span></div><div class="experience-body"><h3>{item.scope}</h3><p class="role">{item.role}</p><p>{item.description}</p><ul class="experience-areas">{item.areas.map(area => <li>{area}</li>)}</ul></div></article>)}
-    <div class="ownership-section"><h3>My service scope at TikTok</h3><p class="section-intro">The user-facing search API layer: three services connecting engine results to the shopping experience.</p><ul class="responsibility-list">{serviceScope.map(([title, body]) => <li><h4>{title}</h4><p>{body}</p></li>)}</ul></div>
-    <div class="ownership-section"><h3>What I’m responsible for</h3><ul class="responsibility-list">{responsibilities.map(([title, body]) => <li><h4>{title}</h4><p>{body}</p></li>)}</ul></div>
+    {experience.map(item => <article class="experience-row"><div class="experience-meta"><span class="experience-date">{item.dates}</span><span class="muted">{item.company}</span></div><div class="experience-body"><h3>{item.scope}</h3><p class="role">{item.role}</p><p>{item.description}</p><div class="experience-details" aria-label={`${item.company} responsibility details`}>{item.details.map(([title, body]) => <InlineInfo title={title} body={body} />)}</div></div></article>)}
     <div class="toolkit"><p class="eyebrow">Tools I work with</p><ul aria-label="Engineering toolkit">{toolkit.map(tool => <li>{tool}</li>)}</ul></div>
   </section>
 
   <section id="about" class="section" aria-labelledby="about-title">
     <div class="section-heading"><div><p class="eyebrow">03 / About</p><h2 id="about-title">An engineer who owns the outcome.</h2></div></div>
     <div class="about-columns"><div class="about-copy"><p>I’m a senior backend engineer based in Jakarta, originally from Surabaya. My strongest work sits where search API architecture, commerce goals, and production constraints meet.</p><p>I stay involved beyond implementation: aligning downstream teams, making migrations observable, operating experiments, and helping other engineers maintain what we ship.</p><p>Go is my primary language. At Tokopedia, I also worked on retrieval, fine-ranking boosts and deboosts, NLP, and limited product-ingestion changes. At TikTok, my ownership centred on Search API, Search Provider, and Search Pack.</p></div><aside class="education-card"><span class="eyebrow">Education</span><h3>Computer Science</h3><p>Petra Christian University</p><p class="muted">B.Sc. · 2017 — 2021</p><div class="recognition"><span class="eyebrow">Recognition</span><h3>ByteDance Spot Award</h3><p>2025 · Delivery and ownership across business-critical initiatives</p></div></aside></div>
-    <dl class="leadership-grid" aria-label="Engineering leadership evidence">{leadership.map(item => <div><dt>{item.label}</dt><dd>{item.value}</dd></div>)}</dl>
   </section>
 
   <section id="resume" class="resume-panel" aria-labelledby="resume-title"><div><p class="eyebrow">04 / Curriculum vitae</p><h2 id="resume-title">The full picture.</h2><p>My experience, skills, and education in one PDF.</p></div><div class="resume-actions"><a class="button button-primary" href="/cv/">View CV <Arrow /></a><a class="text-link" href={profile.cv} download="Reyner-Pantou-CV.pdf">Download PDF <Arrow diagonal /></a></div></section>
