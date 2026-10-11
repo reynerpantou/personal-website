@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="360" viewBox="0 0 720 360" role="img" aria-labelledby="title description">
+  <title id="title">Search API layer service boundaries</title>
+  <desc id="description">Search API orchestrates Search Provider for organic and advertising engine aggregation, and Search Pack for product, video, store, and ad component assembly. These three services form the owned API layer.</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#a4ceff"/></marker></defs>
+  <rect width="720" height="360" rx="12" fill="#15171d"/>
+  <g fill="none" stroke="#a4ceff" stroke-width="1.8" marker-end="url(#arrow)"><path d="M360 95V125H170V145"/><path d="M360 125H550V145"/><path d="M170 235V270"/><path d="M550 235V270"/></g>
+  <g font-family="Inter, Arial, sans-serif" text-anchor="middle">
+    <rect x="250" y="20" width="220" height="75" rx="9" fill="#30281e" stroke="#f2bd71"/>
+    <text x="360" y="51" fill="#f2bd71" font-size="20" font-weight="600">Search API</text><text x="360" y="76" fill="#eae7e1" font-size="13">User-facing orchestration</text>
+    <rect x="40" y="155" width="260" height="80" rx="9" fill="#30281e" stroke="#f2bd71"/>
+    <text x="170" y="186" fill="#f2bd71" font-size="20" font-weight="600">Search Provider</text><text x="170" y="211" fill="#eae7e1" font-size="13">Engine aggregator</text>
+    <rect x="420" y="155" width="260" height="80" rx="9" fill="#30281e" stroke="#f2bd71"/>
+    <text x="550" y="186" fill="#f2bd71" font-size="20" font-weight="600">Search Pack</text><text x="550" y="211" fill="#eae7e1" font-size="13">Item and component packer</text>
+    <rect x="40" y="280" width="260" height="60" rx="9" fill="#1d2b3a" stroke="#454955"/>
+    <text x="170" y="304" fill="#a4ceff" font-size="15" font-weight="600">Organic &amp; Advertising</text><text x="170" y="326" fill="#b7b9c4" font-size="13">External engines</text>
+    <rect x="420" y="280" width="260" height="60" rx="9" fill="#1d2b3a" stroke="#454955"/>
+    <text x="550" y="307" fill="#a4ceff" font-size="15" font-weight="600">Commerce Components</text><text x="550" y="327" fill="#b7b9c4" font-size="12">Product · Video · Store · Ad Cards</text>
+  </g>
+  <g font-family="Inter, Arial, sans-serif" font-size="12" fill="#b7b9c4"><text x="26" y="46">ByteCloud</text><text x="26" y="66">API layer</text></g>
+</svg>
