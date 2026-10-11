@@ -66,11 +66,12 @@ test('homepage exposes every section and labels unfinished work', () => {
   assert.match(project, /work in progress, not a released product/);
 });
 
-test('excluded work and public repository links are absent from generated pages', async () => {
-  assert.ok(!pages.has('/work/bookcabin/'));
-  assert.ok(!pages.has('/writing/caching-partial-results/'));
+test('only approved pages are published and public repository links are absent', async () => {
+  assert.deepEqual([...pages.keys()].sort(), [
+    '/', '/404.html', '/cv/', '/work/commerce-search/', '/work/financial-tracker/',
+  ].sort());
   for (const file of files.filter(file => /\.(html|xml)$/.test(file))) {
-    assert.doesNotMatch(await readFile(file, 'utf8'), /bookcabin|github\.com\/reynerpantou/i);
+    assert.doesNotMatch(await readFile(file, 'utf8'), /github\.com\/reynerpantou/i);
   }
 });
 
