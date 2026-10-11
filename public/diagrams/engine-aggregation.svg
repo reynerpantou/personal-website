@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="360" viewBox="0 0 720 360" role="img" aria-labelledby="title description">
+  <title id="title">API-layer engine aggregation</title>
+  <desc id="description">Shopping surfaces call Search API, which uses Search Provider to aggregate organic and advertising engines. Search API and Search Provider are highlighted as API-layer services; engine internals are dependencies.</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#a4ceff"/></marker></defs>
+  <rect width="720" height="360" rx="12" fill="#15171d"/>
+  <g fill="none" stroke="#a4ceff" stroke-width="1.8" marker-end="url(#arrow)"><path d="M210 75H260"/><path d="M450 75H500"/><path d="M600 115V175H460V220"/><path d="M600 175H620V220"/></g>
+  <g font-family="Inter, Arial, sans-serif" text-anchor="middle">
+    <rect x="30" y="35" width="180" height="80" rx="9" fill="#20232c" stroke="#454955"/>
+    <text x="120" y="66" fill="#eae7e1" font-size="17" font-weight="600">Shopping surfaces</text><text x="120" y="91" fill="#b7b9c4" font-size="12">SRP · Store · Discovery</text>
+    <rect x="270" y="35" width="180" height="80" rx="9" fill="#30281e" stroke="#f2bd71"/>
+    <text x="360" y="66" fill="#f2bd71" font-size="18" font-weight="600">Search API</text><text x="360" y="91" fill="#eae7e1" font-size="13">Request orchestration</text>
+    <rect x="510" y="35" width="180" height="80" rx="9" fill="#30281e" stroke="#f2bd71"/>
+    <text x="600" y="66" fill="#f2bd71" font-size="18" font-weight="600">Search Provider</text><text x="600" y="91" fill="#eae7e1" font-size="13">Engine aggregation</text>
+    <rect x="390" y="230" width="140" height="80" rx="9" fill="#1d2b3a" stroke="#454955"/>
+    <text x="460" y="262" fill="#a4ceff" font-size="18" font-weight="600">Organic</text><text x="460" y="287" fill="#b7b9c4" font-size="13">Search engine</text>
+    <rect x="550" y="230" width="140" height="80" rx="9" fill="#1d2b3a" stroke="#454955"/>
+    <text x="620" y="262" fill="#a4ceff" font-size="18" font-weight="600">Advertising</text><text x="620" y="287" fill="#b7b9c4" font-size="13">Ad engine</text>
+  </g>
+  <g font-family="Inter, Arial, sans-serif"><text x="30" y="205" fill="#f2bd71" font-size="14" font-weight="600">API-layer integration boundaries</text><text x="30" y="230" fill="#b7b9c4" font-size="13">Preserve filters, sorting, and commerce contracts.</text><text x="30" y="337" fill="#b7b9c4" font-size="12">Conceptual interfaces; arrows do not prescribe request timing or engine internals.</text></g>
+</svg>

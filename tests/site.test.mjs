@@ -193,6 +193,114 @@ test('email copying reports success and supports manual copying when clipboard a
   }
 });
 
+test('case studies expose summaries, native section navigation, and onward routes', () => {
+  const cases = [...pages].filter(([route]) => route.startsWith('/work/'));
+  const onward = new Map();
+  for (const [route, elements] of cases) {
+    const overview = elements.find(node => node.tagName === 'dl' && attr(node, 'aria-label') === 'Case study at a glance');
+    assert.ok(overview, `${route}: missing summary`);
+    assert.deepEqual(nodes(overview).filter(node => node.tagName === 'dt').map(node => pageText(nodes(node)).trim()), ['Role', 'Delivery', 'Tech Stack', 'Impact']);
+    assert.ok(nodes(overview).filter(node => node.tagName === 'dd').every(node => pageText(nodes(node)).trim().length > 0));
+    const contents = elements.find(node => node.tagName === 'nav' && attr(node, 'aria-label') === 'On this page');
+    const links = nodes(contents).filter(node => node.tagName === 'a');
+    assert.deepEqual(links.map(node => attr(node, 'href')), ['#problem', '#architecture', '#execution', '#result']);
+    for (const link of links) {
+      const section = elements.find(node => attr(node, 'id') === attr(link, 'href').slice(1));
+      assert.equal(section?.tagName, 'section');
+      assert.ok(nodes(section).some(node => node.tagName === 'h2' && attr(node, 'id') === attr(section, 'aria-labelledby')));
+    }
+    const crumbs = elements.find(node => node.tagName === 'nav' && attr(node, 'aria-label') === 'Breadcrumb');
+    assert.deepEqual(nodes(crumbs).filter(node => node.tagName === 'a').map(node => attr(node, 'href')), ['/', '/#work']);
+    const actions = elements.find(node => node.tagName === 'nav' && attr(node, 'aria-label') === 'Continue exploring');
+    const next = nodes(actions).find(node => node.tagName === 'a' && attr(node, 'data-prefetch') !== undefined);
+    const nextRoute = attr(next, 'href');
+    assert.ok(pages.has(nextRoute) && nextRoute !== route);
+    onward.set(route, nextRoute);
+    assert.ok(nodes(actions).some(node => node.tagName === 'a' && attr(node, 'href') === '/cv/reyner-pantou-cv.pdf'));
+    for (const image of elements.filter(node => node.tagName === 'img' && attr(node, 'src')?.startsWith('/diagrams/'))) {
+      assert.ok(attr(image, 'alt').length > 40);
+      assert.equal(attr(image, 'loading'), 'lazy');
+      const region = image.parentNode;
+      assert.equal(attr(region, 'role'), 'region');
+      assert.equal(attr(region, 'tabindex'), '0');
+    }
+  }
+  const first = cases[0][0], visited = new Set();
+  let current = first;
+  do { visited.add(current); current = onward.get(current); } while (!visited.has(current));
+  assert.equal(current, first);
+  assert.equal(visited.size, cases.length, 'Read Next must traverse all case studies');
+});
+
+test('intent prefetch respects cancellation, data saving, boundaries, and deduplication', async () => {
+  const scripts = await Promise.all(pages.get('/').filter(node => node.tagName === 'script' && attr(node, 'type') === 'module').map(async node => attr(node, 'src') ? readFile(join(root, attr(node, 'src')), 'utf8') : pageText(nodes(node))));
+  const code = scripts.find(script => script.includes('prefetch') && script.includes('touchstart'));
+  assert.ok(code, 'Exercise the shipped prefetch enhancement');
+  for (const scenario of ['hint', 'fetch', 'offline', 'saveData', '2g', 'slow-2g']) {
+    const timers = new Map(), hints = [], requests = [];
+    let timerId = 0;
+    const links = ['/work/commerce-search/', '/work/search-performance/', '/cv/reyner-pantou-cv.pdf', 'https://example.com/work/case/'].map(href => ({
+      href: new URL(href, origin).href, handlers: {}, addEventListener(type, handler) { this.handlers[type] = handler; },
+    }));
+    runInNewContext(code, {
+      URL, Set,
+      navigator: { onLine: scenario !== 'offline', connection: { saveData: scenario === 'saveData', effectiveType: scenario.includes('2g') ? scenario : '4g' } },
+      window: { location: { href: origin + '/', origin } },
+      document: { querySelectorAll: () => links, createElement: () => ({ relList: { supports: () => scenario === 'hint' } }), head: { append: hint => hints.push(hint) } },
+      fetch: (url, options) => { requests.push({ url, options }); return Promise.resolve(); },
+      setTimeout: (handler, delay) => { assert.equal(delay, 120); timers.set(++timerId, handler); return timerId; },
+      clearTimeout: id => timers.delete(id),
+    });
+    const flush = () => { for (const handler of timers.values()) handler(); timers.clear(); };
+    assert.equal(hints.length + requests.length, 0, 'No speculative download on initial page load');
+    links[0].handlers.pointerenter({ pointerType: 'mouse' });
+    links[0].handlers.pointerleave(); flush();
+    assert.equal(hints.length + requests.length, 0, 'Brief hover cancels prefetch');
+    links[0].handlers.focus(); links[0].handlers.blur(); flush();
+    assert.equal(hints.length + requests.length, 0, 'Brief focus cancels prefetch');
+    links[0].handlers.pointerenter({ pointerType: 'touch' }); flush();
+    assert.equal(hints.length + requests.length, 0, 'Touch pointer entry alone is not intent');
+    links[0].handlers.pointerenter({ pointerType: 'mouse' }); links[0].handlers.focus(); flush();
+    links[0].handlers.touchstart();
+    links[1].handlers.touchstart();
+    links[2].handlers.touchstart(); links[3].handlers.touchstart();
+    const allowed = scenario === 'hint' || scenario === 'fetch';
+    assert.equal(hints.length + requests.length, allowed ? 2 : 0, `${scenario}: only distinct same-origin case pages may be warmed`);
+    if (scenario === 'hint') for (const hint of hints) { assert.equal(hint.rel, 'prefetch'); assert.equal(hint.as, 'document'); }
+    if (scenario === 'fetch') for (const request of requests) { assert.equal(request.options.priority, 'low'); assert.equal(request.options.credentials, 'same-origin'); }
+  }
+});
+
+test('case reading navigation tracks manual scroll, resizing, and the final section', async () => {
+  const elements = pages.get('/work/commerce-search/');
+  const scripts = await Promise.all(elements.filter(node => node.tagName === 'script' && attr(node, 'type') === 'module').map(async node => attr(node, 'src') ? readFile(join(root, attr(node, 'src')), 'utf8') : pageText(nodes(node))));
+  const code = scripts.find(script => script.includes('.case-toc nav'));
+  assert.ok(code);
+  const ids = ['problem', 'architecture', 'execution', 'result'];
+  const links = ids.map(id => ({ hash: '#' + id, current: undefined, setAttribute(_, value) { this.current = value; }, removeAttribute() { this.current = undefined; } }));
+  const frames = [], handlers = {};
+  const window = { scrollY: 0, innerHeight: 600, innerWidth: 1200, addEventListener: (type, handler) => { handlers[type] = handler; } };
+  const sections = ids.map((id, index) => ({ id, getBoundingClientRect: () => ({ top: 180 + index * 550 - window.scrollY }) }));
+  runInNewContext(code, {
+    window,
+    document: { querySelector: () => ({ querySelectorAll: () => links }), getElementById: id => sections.find(section => section.id === id), documentElement: { scrollHeight: 2400 } },
+    requestAnimationFrame: handler => frames.push(handler),
+  });
+  const current = () => links.filter(link => link.current).map(link => link.hash);
+  const flush = () => frames.splice(0).forEach(handler => handler());
+  assert.deepEqual(current(), ['#problem']);
+  window.scrollY = 800;
+  handlers.scroll(); handlers.scroll();
+  assert.equal(frames.length, 1, 'Scroll updates must be bounded to a single animation frame');
+  flush(); assert.deepEqual(current(), ['#architecture']);
+  window.scrollY = 1150;
+  handlers.scroll(); flush(); assert.deepEqual(current(), ['#execution']);
+  window.innerWidth = 390;
+  handlers.resize(); flush(); assert.deepEqual(current(), ['#architecture']);
+  window.scrollY = 1800;
+  handlers.scroll(); flush(); assert.deepEqual(current(), ['#result']);
+});
+
 test('Cloudflare Pages output is static and allows the CV to embed on the same origin', async () => {
   assert.ok(files.includes(join(root, '404.html')));
   assert.ok(files.includes(join(root, '_headers')));
@@ -200,7 +308,7 @@ test('Cloudflare Pages output is static and allows the CV to embed on the same o
   assert.ok(!files.some(file => /(?:^|[/\\])(?:_worker\.js|functions|server)(?:[/\\]|$)/.test(relative(root, file))));
   for (const [route, elements] of pages) {
     const interactive = elements.filter(node => node.tagName === 'script' && attr(node, 'type') !== 'application/ld+json');
-    assert.equal(interactive.length, route === '/' ? 2 : 1, 'Only small navigation and email-copy enhancements are shipped');
+    assert.equal(interactive.length, route === '/' || route.startsWith('/work/') ? 3 : 1, 'Only scoped navigation, copy, and prefetch enhancements are shipped');
     for (const script of interactive) assert.equal(attr(script, 'type'), 'module');
   }
 });

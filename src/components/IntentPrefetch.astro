@@ -1,0 +1,30 @@
+<script>
+  const links = document.querySelectorAll<HTMLAnchorElement>('a[data-prefetch]');
+  const warmed = new Set<string>();
+  const warm = (link: HTMLAnchorElement) => {
+    const connection = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+    if (navigator.onLine === false || connection?.saveData || /2g/.test(connection?.effectiveType ?? '')) return;
+    const url = new URL(link.href, window.location.href);
+    if (url.origin !== window.location.origin || !url.pathname.startsWith('/work/') || warmed.has(url.href)) return;
+    warmed.add(url.href);
+    const hint = document.createElement('link');
+    if (hint.relList?.supports?.('prefetch')) {
+      hint.rel = 'prefetch';
+      hint.href = url.href;
+      hint.as = 'document';
+      document.head.append(hint);
+    } else {
+      fetch(url.href, { priority: 'low', credentials: 'same-origin', headers: { Accept: 'text/html' } }).catch(() => warmed.delete(url.href));
+    }
+  };
+  for (const link of links) {
+    let pending: ReturnType<typeof setTimeout>;
+    const cancel = () => clearTimeout(pending);
+    const schedule = () => { cancel(); pending = setTimeout(() => warm(link), 120); };
+    link.addEventListener('pointerenter', event => { if (event.pointerType !== 'touch') schedule(); });
+    link.addEventListener('pointerleave', cancel);
+    link.addEventListener('focus', schedule);
+    link.addEventListener('blur', cancel);
+    link.addEventListener('touchstart', () => warm(link), { passive: true });
+  }
+</script>

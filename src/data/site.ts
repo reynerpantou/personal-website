@@ -59,6 +59,10 @@ export const experience = [
 export const projects = [
   {
     slug: 'commerce-search',
+    role: 'Core Engineer · API Integration',
+    delivery: 'Initial integration in ≤1 month',
+    stack: ['Go', 'RPC'],
+    diagram: 'engine-aggregation',
     number: '01',
     icon: 'search',
     title: 'Tokopedia × TikTok Shop search',
@@ -97,6 +101,10 @@ export const projects = [
   },
   {
     slug: 'search-platform-migration',
+    role: 'Technical Owner · API Layer',
+    delivery: 'Phased Migration & Full Rollout',
+    stack: ['Go', 'Kitex', 'ByteCloud'],
+    diagram: 'api-layer',
     number: '02',
     icon: 'platform',
     title: 'A simpler search API layer',
@@ -135,6 +143,9 @@ export const projects = [
   },
   {
     slug: 'search-performance',
+    role: 'Engineer in Charge · Queries & Index Mappings',
+    delivery: 'Iterative Query, Index & Cache Improvements',
+    stack: ['Go', 'Elasticsearch', 'Redis'],
     number: '03',
     icon: 'database',
     title: 'Lower-cost, faster search',
@@ -174,6 +185,10 @@ export const projects = [
   },
   {
     slug: 'search-monetization',
+    role: 'Search-Side Technical Owner',
+    delivery: 'Phased Ad Integrations & Experiments',
+    stack: ['Go', 'RPC'],
+    diagram: 'engine-aggregation',
     number: '04',
     icon: 'ads',
     title: 'Ads inside commerce search',
@@ -212,6 +227,9 @@ export const projects = [
   },
   {
     slug: 'commerce-experience',
+    role: 'Backend Engineer · Product Cards & Promotions',
+    delivery: 'Contract Redesign & Experiment Rollouts',
+    stack: ['Go'],
     number: '05',
     icon: 'card',
     title: 'Product cards and promotions',
@@ -253,6 +271,9 @@ export const projects = [
   },
   {
     slug: 'search-reliability',
+    role: 'Engineer in Charge · Migrations & Governance',
+    delivery: 'Endpoint & Platform Migrations',
+    stack: ['Go', 'GraphQL'],
     number: '06',
     icon: 'shield',
     title: 'Safer changes, clearer ownership',

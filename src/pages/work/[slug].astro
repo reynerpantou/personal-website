@@ -1,7 +1,9 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Arrow from '../../components/Arrow.astro';
-import { projects } from '../../data/site';
+import CaseNavigation from '../../components/CaseNavigation.astro';
+import IntentPrefetch from '../../components/IntentPrefetch.astro';
+import { projects, profile } from '../../data/site';
 export function getStaticPaths() {
   return projects.map(project => ({ params: { slug: project.slug }, props: { project } }));
 }
@@ -10,16 +12,33 @@ const nextProject = projects[(projects.findIndex(item => item.slug === project.s
 ---
 <Base title={project.title} description={project.summary}>
   <article class="detail-page">
-    <a class="back-link" href="/#work"><span aria-hidden="true">←</span> Selected work</a>
-    <header class="detail-header"><span class="eyebrow">{project.category} <span class="separator">/</span> Professional work</span><h1>{project.title}</h1><p class="detail-intro">{project.intro}</p><ul class="tags">{project.tags.map(tag => <li>{tag}</li>)}</ul></header>
-    <dl class="case-metrics" aria-label="Selected reported outcomes">{project.metrics.map(metric => <div><dt>{metric.label}</dt><dd><span class="metric-value">{metric.value}</span><p>{metric.context}</p></dd></div>)}</dl>
-    <section class="detail-section"><h2>What I owned</h2><ul class="impact-list">{project.ownership.map(item => <li>{item}</li>)}</ul></section>
-    <section class="detail-section"><h2>The context</h2><p>{project.context}</p></section>
-    <section class="detail-section"><h2>Business impact</h2><ul class="impact-list">{project.business.map(item => <li>{item}</li>)}</ul></section>
-    <section class="detail-section"><h2>Technical impact</h2><ul class="impact-list">{project.technical.map(item => <li>{item}</li>)}</ul></section>
-    <section class="detail-section"><h2>The engineering decisions</h2><div class="focus-list">{project.focus.map(([title, body], index) => <div class="focus-item"><span class="eyebrow">0{index + 1}</span><div><h3>{title}</h3><p>{body}</p></div></div>)}</div></section>
-    <aside class="evidence-note" aria-label="How to interpret the results"><p class="eyebrow">About these results</p><p>{project.evidence}</p></aside>
-    <section class="detail-section takeaway"><span class="eyebrow">THE TAKEAWAY</span><p>{project.takeaway}</p></section>
-    <a class="next-project" href={`/work/${nextProject.slug}/`}><div><span class="eyebrow">NEXT CASE STUDY</span><h2>{nextProject.title}</h2></div><Arrow /></a>
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/#work">Work</a></li><li><span aria-current="page">{project.title}</span></li></ol></nav>
+    <header class="detail-header"><span class="eyebrow">{project.category} <span class="separator">/</span> Professional work</span><h1>{project.title}</h1><p class="detail-intro">{project.summary}</p>
+      <dl class="case-overview" aria-label="Case study at a glance">
+        <div><dt>Role</dt><dd>{project.role}</dd></div>
+        <div><dt>Delivery</dt><dd>{project.delivery}</dd></div>
+        <div><dt>Tech Stack</dt><dd>{project.stack.join(' · ')}</dd></div>
+        <div class="overview-impact"><dt>Impact</dt><dd><strong>{project.metrics[0].value}</strong> {project.metrics[0].label}</dd></div>
+      </dl>
+    </header>
+    <div class="case-layout">
+      <CaseNavigation />
+      <div class="case-content">
+        <section id="problem" class="detail-section" aria-labelledby="problem-title"><h2 id="problem-title">The Problem</h2><p>{project.context}</p></section>
+        <section id="architecture" class="detail-section" aria-labelledby="architecture-title"><h2 id="architecture-title">The Architecture</h2>
+          {project.diagram && <figure class="architecture-figure"><div class="diagram-scroll" role="region" tabindex="0" aria-label="Architecture diagram; scroll horizontally to see the full diagram"><img src={`/diagrams/${project.diagram}.svg`} alt={project.diagram === 'api-layer' ? 'Search API orchestrates Search Provider engine aggregation and Search Pack item and component assembly. Organic and advertising engines are dependencies beyond the owned API layer.' : 'Shopping surfaces call Search API, which uses Search Provider to aggregate TikTok organic and advertising engines. Engine ownership stays outside the API layer.'} width="720" height="360" loading="lazy" decoding="async" /></div><figcaption>A simplified view of service responsibilities. Highlighted services are the API layer; engine internals are outside this ownership scope.</figcaption></figure>}
+          <div class="focus-list">{project.focus.map(([title, body], index) => <div class="focus-item"><span class="eyebrow">0{index + 1}</span><div><h3>{title}</h3><p>{body}</p></div></div>)}</div>
+        </section>
+        <section id="execution" class="detail-section" aria-labelledby="execution-title"><h2 id="execution-title">The Execution</h2><p>{project.intro}</p><h3 class="detail-subheading">What I owned</h3><ul class="impact-list">{project.ownership.map(item => <li>{item}</li>)}</ul><h3 class="detail-subheading">Technical impact</h3><ul class="impact-list">{project.technical.map(item => <li>{item}</li>)}</ul></section>
+        <section id="result" class="detail-section" aria-labelledby="result-title"><h2 id="result-title">The Result</h2>
+          <dl class="case-metrics" aria-label="Selected reported outcomes">{project.metrics.map(metric => <div><dt>{metric.label}</dt><dd><span class="metric-value">{metric.value}</span><p>{metric.context}</p></dd></div>)}</dl>
+          <h3 class="detail-subheading">Business impact</h3><ul class="impact-list">{project.business.map(item => <li>{item}</li>)}</ul>
+          <aside class="evidence-note" aria-label="How to interpret the results"><p class="eyebrow">About these results</p><p>{project.evidence}</p></aside>
+          <div class="takeaway"><p class="eyebrow">The Takeaway</p><p>{project.takeaway}</p></div>
+        </section>
+        <nav class="case-actions" aria-label="Continue exploring"><a class="case-action case-action-next" href={`/work/${nextProject.slug}/`} data-prefetch><div><span class="eyebrow">Read Next</span><h3>{nextProject.title}</h3></div><Arrow /></a><a class="case-action case-action-cv" href={profile.cv}><div><span class="eyebrow">View CV</span><h3>My experience in one PDF</h3></div><Arrow diagonal /></a></nav>
+      </div>
+    </div>
   </article>
 </Base>
+<IntentPrefetch />

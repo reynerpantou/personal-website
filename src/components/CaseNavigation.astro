@@ -1,0 +1,38 @@
+---
+const sections = [
+  { id: 'problem', label: 'The Problem' },
+  { id: 'architecture', label: 'The Architecture' },
+  { id: 'execution', label: 'The Execution' },
+  { id: 'result', label: 'The Result' },
+];
+---
+<aside class="case-toc">
+  <nav aria-label="On this page">
+    <p class="eyebrow">On this page</p>
+    {sections.map((section, index) => <a href={`#${section.id}`} aria-current={index === 0 ? 'location' : undefined}>{section.label}</a>)}
+  </nav>
+</aside>
+<script>
+  const nav = document.querySelector<HTMLElement>('.case-toc nav');
+  if (nav) {
+    const links = [...nav.querySelectorAll<HTMLAnchorElement>('a')];
+    const sections = links.map(link => document.getElementById(link.hash.slice(1))).filter((node): node is HTMLElement => !!node);
+    let queued = false;
+    const update = () => {
+      queued = false;
+      let active = sections[0]?.id;
+      const offset = window.innerWidth > 700 ? 140 : 48;
+      for (const section of sections) if (section.getBoundingClientRect().top <= offset) active = section.id;
+      if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4) active = sections.at(-1)?.id ?? active;
+      for (const link of links) {
+        if (link.hash === `#${active}`) link.setAttribute('aria-current', 'location');
+        else link.removeAttribute('aria-current');
+      }
+    };
+    const schedule = () => { if (!queued) { queued = true; requestAnimationFrame(update); } };
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    window.addEventListener('pageshow', schedule);
+    update();
+  }
+</script>
