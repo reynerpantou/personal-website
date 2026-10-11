@@ -67,8 +67,8 @@ test('homepage exposes every section and describes delivered ownership', () => {
   assert.match(pageText(home), /Search Pack.*item and component packer/is);
   assert.match(pageText(home), /Limited ingestion-service contributions/i);
   assert.doesNotMatch(pageText(home), /technical owner of Tokopedia’s Search Result Page/i);
-  assert.match(pageText(home), /May vs\. April 2024/);
-  assert.match(pageText(home), /High-value-user coupon experiment/);
+  assert.match(pageText(home), /TikTok Search Platform Integration/);
+  assert.match(pageText(home), /High-Value User Coupon Experiment/);
   assert.match(pageText(home), /Combined team program/);
   assert.match(pageText(home), /results are not cumulative/);
   assert.doesNotMatch(pageText(home), /Code reviews in 2023|Architecture Review Board presentations|My service scope at TikTok|What I’m responsible for/);
@@ -119,7 +119,7 @@ test('mobile navigation reaches home sections consistently from every page', () 
   assert.ok(impact);
   assert.equal(attr(impact, 'open'), undefined);
   assert.match(pageText(nodes(impact)), /View all outcomes/);
-  assert.match(pageText(nodes(impact)), /High-value-user coupon experiment/);
+  assert.match(pageText(nodes(impact)), /High-Value User Coupon Experiment/);
 });
 
 test('only approved pages are published and public repository links are absent', async () => {
