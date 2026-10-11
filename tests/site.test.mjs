@@ -95,4 +95,49 @@ test('Cloudflare Pages output is static and allows the CV to embed on the same o
   }
 });
 
+test('text colors meet WCAG AA contrast on both dark surfaces', async () => {
+  const css = await readFile('src/styles/global.css', 'utf8');
+  const tokens = Object.fromEntries([...css.matchAll(/--([a-z-]+):\s*(#[\da-f]{6});/gi)].map(([, name, color]) => [name, color]));
+  for (const background of ['background', 'surface', 'surface-hover']) {
+    for (const foreground of ['text', 'muted', 'accent']) {
+      const ratio = contrast(tokens[foreground], tokens[background]);
+      assert.ok(ratio >= 4.5, `${foreground} on ${background}: ${ratio.toFixed(2)}:1`);
+    }
+  }
+  assert.ok(contrast(tokens.background, tokens.accent) >= 4.5, 'Primary button label contrast');
+});
+
+test('homepage HTML, CSS, and one local font stay below 100 KiB combined', async () => {
+  const home = pages.get('/');
+  const stylesheets = home.filter(node => node.tagName === 'link' && attr(node, 'rel') === 'stylesheet');
+  assert.ok(stylesheets.length > 0, 'The homepage should have a stylesheet');
+  let total = (await readFile(join(root, 'index.html'))).length;
+  const fonts = new Set();
+  for (const node of stylesheets) {
+    const url = new URL(attr(node, 'href'), origin);
+    assert.equal(url.origin, origin, 'Stylesheets must be hosted locally');
+    const css = await readFile(join(root, url.pathname), 'utf8');
+    total += Buffer.byteLength(css);
+    for (const [, value] of css.matchAll(/url\(["']?([^"')]+)["']?\)/g)) {
+      const asset = new URL(value, url);
+      assert.equal(asset.origin, origin, 'CSS assets must be hosted locally');
+      assert.ok(asset.pathname.endsWith('.woff2'), 'No decorative image downloads');
+      fonts.add(asset.pathname);
+    }
+  }
+  assert.equal(fonts.size, 1, 'Only one variable font should be shipped');
+  for (const font of fonts) total += (await readFile(join(root, font))).length;
+  assert.ok(total < 100 * 1024, `Homepage assets total ${total} bytes`);
+  assert.ok(!home.some(node => node.tagName === 'img' || node.tagName === 'video'), 'No large media dependencies on the homepage');
+});
+
+function luminance(hex) {
+  const channels = hex.slice(1).match(/../g).map(value => parseInt(value, 16) / 255);
+  const linear = channels.map(value => value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4);
+  return linear[0] * 0.2126 + linear[1] * 0.7152 + linear[2] * 0.0722;
+}
+function contrast(first, second) {
+  const values = [luminance(first), luminance(second)].sort((a, b) => b - a);
+  return (values[0] + 0.05) / (values[1] + 0.05);
+}
 function pageText(elements) { return elements.filter(node => node.nodeName === '#text').map(node => node.value).join(' '); }
