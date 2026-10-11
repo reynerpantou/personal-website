@@ -81,7 +81,7 @@ test('homepage exposes every section and describes delivered ownership', () => {
 
 test('experience explanations remain accessible without JavaScript and the portrait is local', () => {
   const home = pages.get('/');
-  const details = home.filter(node => node.tagName === 'details');
+  const details = home.filter(node => node.tagName === 'details' && attr(node, 'class') === 'inline-info');
   assert.ok(details.length > 0);
   for (const detail of details) {
     assert.equal(attr(detail, 'open'), undefined, 'Details start compact');
@@ -95,6 +95,33 @@ test('experience explanations remain accessible without JavaScript and the portr
   assert.equal(attr(portrait, 'width'), '400');
   assert.equal(attr(portrait, 'height'), '400');
   assert.ok(home.some(node => node.tagName === 'a' && attr(node, 'href') === 'https://www.linkedin.com/in/reyner-pantou/'));
+});
+
+test('mobile navigation reaches every section and CV from every page', () => {
+  for (const [route, elements] of pages) {
+    const dock = elements.find(node => node.tagName === 'nav' && attr(node, 'aria-label') === 'Mobile navigation');
+    assert.ok(dock, `${route}: missing persistent mobile navigation`);
+    const links = nodes(dock).filter(node => node.tagName === 'a');
+    assert.deepEqual(links.map(node => pageText(nodes(node)).trim()), ['Home', 'Work', 'Career', 'CV', 'Contact']);
+    for (const link of links) {
+      const target = new URL(attr(link, 'href'), origin + route);
+      if (attr(link, 'data-section') === 'resume') assert.equal(target.pathname, '/cv/');
+      else {
+        assert.equal(target.pathname, '/');
+        assert.ok(pages.get('/').some(node => attr(node, 'id') === target.hash.slice(1)));
+      }
+    }
+    const current = links.filter(node => attr(node, 'aria-current'));
+    assert.equal(current.length, 1);
+    assert.equal(attr(current[0], 'data-section'), route.startsWith('/work/') ? 'work' : route === '/cv/' ? 'resume' : 'main');
+    const viewport = elements.find(node => node.tagName === 'meta' && attr(node, 'name') === 'viewport');
+    assert.match(attr(viewport, 'content'), /viewport-fit=cover/);
+  }
+  const impact = pages.get('/').find(node => node.tagName === 'details' && attr(node, 'class') === 'impact-details');
+  assert.ok(impact);
+  assert.equal(attr(impact, 'open'), undefined);
+  assert.match(pageText(nodes(impact)), /View all outcomes/);
+  assert.match(pageText(nodes(impact)), /High-value-user coupon experiment/);
 });
 
 test('only approved pages are published and public repository links are absent', async () => {
@@ -126,7 +153,7 @@ test('Cloudflare Pages output is static and allows the CV to embed on the same o
   assert.ok(!files.some(file => /(?:^|[/\\])(?:_worker\.js|functions|server)(?:[/\\]|$)/.test(relative(root, file))));
   for (const [route, elements] of pages) {
     const interactive = elements.filter(node => node.tagName === 'script' && attr(node, 'type') !== 'application/ld+json');
-    assert.equal(interactive.length, route === '/' ? 1 : 0, 'Only the homepage details interaction needs JavaScript');
+    assert.equal(interactive.length, route === '/' ? 3 : 1, 'Only small navigation and details enhancements are shipped');
     for (const script of interactive) assert.equal(attr(script, 'type'), 'module');
   }
 });
@@ -143,7 +170,7 @@ test('text colors meet WCAG AA contrast on neutral and colored surfaces', async 
   assert.ok(contrast(tokens.background, tokens.accent) >= 4.5, 'Primary button label contrast');
 });
 
-test('homepage assets stay lightweight with one local portrait and a small details script', async () => {
+test('homepage assets stay lightweight with one local portrait and small interaction scripts', async () => {
   const home = pages.get('/');
   const stylesheets = home.filter(node => node.tagName === 'link' && attr(node, 'rel') === 'stylesheet');
   assert.ok(stylesheets.length > 0, 'The homepage should have a stylesheet');
@@ -173,7 +200,7 @@ test('homepage assets stay lightweight with one local portrait and a small detai
       scriptBytes += bytes; total += bytes;
     } else scriptBytes += Buffer.byteLength(pageText(nodes(node)));
   }
-  assert.ok(scriptBytes < 3 * 1024, `Details script totals ${scriptBytes} bytes`);
+  assert.ok(scriptBytes < 3 * 1024, `Interaction scripts total ${scriptBytes} bytes`);
   assert.ok(total < 100 * 1024, `HTML, CSS, font and script total ${total} bytes`);
   const images = home.filter(node => node.tagName === 'img');
   assert.equal(images.length, 1, 'Only the requested portrait is loaded');

@@ -10,15 +10,19 @@ const toolkit = ['Go', 'Elasticsearch', 'Redis', 'PostgreSQL', 'Kafka', 'gRPC'];
   <section class="hero" aria-labelledby="intro-title">
     <div class="hero-copy">
       <p class="eyebrow">Senior backend engineer · Jakarta, Indonesia</p>
-      <h1 id="intro-title">Hi, I’m <span>Reyner.</span></h1>
+      <h1 id="intro-title"><span class="hero-greeting">Hi, I’m </span><span>Reyner.</span></h1>
       <p class="hero-subtitle">I build search APIs<br class="desktop-break" /> <span>from design to production.</span></p>
-      <p class="hero-description">{profile.introduction}</p>
+      <p class="hero-description desktop-intro">{profile.introduction}</p>
+      <p class="hero-description mobile-intro">Five years at Tokopedia and ByteDance. I build user-facing search APIs, engine integrations, and commerce experiences with Go.</p>
       <div class="hero-actions"><a class="button button-primary" href="#work">Explore my work <Arrow /></a><a class="button button-secondary" href="/cv/">View CV <Arrow diagonal /></a></div>
     </div>
     <figure class="portrait"><img src="/reyner-pantou.webp" alt="Portrait of Reyner Pantou" width="400" height="400" fetchpriority="high" decoding="async" /><figcaption>Go · Search APIs · Distributed systems</figcaption></figure>
     <div class="hero-history"><span class="eyebrow">Previously at</span><span><span class="company-tokopedia">Tokopedia</span> <span class="separator" aria-hidden="true">/</span> <span class="company-bytedance">ByteDance</span></span><span class="history-detail">2021 — 2026</span></div>
-    <div class="career-impact" aria-label="Career impact across delivered initiatives">{highlights.map(item => <div><h2>{item.label}</h2><p class="impact-summary">{item.summary}</p><dl>{item.results.map(([result, scope]) => <div><dt>{result}</dt><dd>{scope}</dd></div>)}</dl></div>)}</div>
-    <p class="impact-scope">Selected outcomes across my career. Each figure belongs to its own initiative or experiment; results are not cumulative.</p>
+    <div class="mobile-impact-preview" aria-label="Selected career outcomes"><p><strong>−54.68%</strong> search API hosting cost</p><p><strong>+18.5%</strong> search GMV · May vs. April 2024</p></div>
+    <details class="impact-details"><summary><span class="impact-open-label">View all outcomes</span><span class="impact-close-label">Hide outcomes</span><span aria-hidden="true">⌄</span></summary>
+      <div class="career-impact" aria-label="Career impact across delivered initiatives">{highlights.map(item => <div><h2>{item.label}</h2><p class="impact-summary">{item.summary}</p><dl>{item.results.map(([result, scope]) => <div><dt>{result}</dt><dd>{scope}</dd></div>)}</dl></div>)}</div>
+      <p class="impact-scope">Selected outcomes across my career. Each figure belongs to its own initiative or experiment; results are not cumulative.</p>
+    </details>
   </section>
 
   <section id="work" class="section" aria-labelledby="work-title">
@@ -48,3 +52,10 @@ const toolkit = ['Go', 'Elasticsearch', 'Redis', 'PostgreSQL', 'Kafka', 'gRPC'];
 
   <section id="contact" class="contact-section" aria-labelledby="contact-title"><div><p class="eyebrow">05 / Get in touch</p><h2 id="contact-title">Let’s talk.</h2><p>Looking for a backend engineer who can own<br class="desktop-break" /> architecture, delivery, and production outcomes?</p></div><div class="contact-actions"><a class="button button-primary" href={`mailto:${profile.email}`}>Send me an email <Arrow diagonal /></a><a class="text-link" href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn <Arrow diagonal /><span class="sr-only"> (opens in a new tab)</span></a><span class="contact-location">Based in Jakarta, Indonesia</span></div></section>
 </Base>
+<script>
+  const impact = document.querySelector<HTMLDetailsElement>('.impact-details');
+  const desktop = window.matchMedia('(min-width: 701px)');
+  const sync = () => { if (impact) impact.open = desktop.matches; };
+  desktop.addEventListener('change', sync);
+  sync();
+</script>
