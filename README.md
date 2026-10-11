@@ -20,10 +20,11 @@ npm run preview # Preview the static production build
 ## Content
 
 - `src/data/site.ts`: profile, contact details, career-wide impact summaries, employer-specific ownership, and six delivered workstreams with scoped business and technical metrics.
-- `src/components/InlineInfo.astro`: compact native details for responsibility explanations, enhanced with hover, keyboard focus, Escape dismissal, and viewport-aware floating panels.
+- `src/components/HighlightedText.astro`: server-rendered emphasis for technology keywords and key outcomes in visible responsibility bullets.
+- `src/components/CopyEmail.astro`: selectable email address and a small copy action with accessible feedback and a manual-copy fallback.
 - `public/reyner-pantou.webp`: optimized local portrait provided by Reyner, independent of the expiring LinkedIn media URL.
 - `src/pages/index.astro`: introduction, selected work, experience, CV, about, and contact.
-- `src/pages/work/[slug].astro`: professional work and ongoing personal project detail pages.
+- `src/pages/work/[slug].astro`: six delivered professional work case studies.
 - `src/pages/cv.astro`: embedded CV viewer with direct-open and download fallbacks.
 - `public/cv/reyner-pantou-cv.pdf`: the original uploaded CV, served as a static file.
 - `src/layouts/Base.astro`: navigation, search and social metadata, and footer.
@@ -68,11 +69,11 @@ The canonical URL is in `astro.config.mjs`; update that and `public/robots.txt` 
 
 ## Verification
 
-GitHub Actions runs type checking, the production build, and generated-site tests. Tests validate English page metadata, landmarks, internal paths, fragments, local assets, mobile navigation, and CV viewing/download links; verify the PDF is copied unchanged; check excluded work stays absent; and verify static output has no Worker entrypoints. Small navigation and details enhancements use vanilla JavaScript without framework hydration.
+GitHub Actions runs type checking, the production build, and generated-site tests. Tests validate English page metadata, landmarks, internal paths, fragments, local assets, mobile navigation, visible responsibilities, and CV viewing/download links; verify the PDF is copied unchanged; check excluded work stays absent; and verify static output has no Worker entrypoints. Clipboard checks execute the built enhancement through success, denied-access, and unavailable-API paths. Small navigation and email-copy enhancements use vanilla JavaScript without framework hydration.
 
-The layout uses flexible grids and wrapping navigation, with compact work cards in three desktop columns, two tablet columns, and one mobile column. Body text stays at 16px; links and detail controls have visible keyboard focus; navigation, actions, and detail controls have touch targets of at least 44px. Reduced-motion preferences disable transitions. Responsibility explanations are embedded in the employer experience: hover or keyboard focus shows floating content on desktop, and native details support tap/click and work without JavaScript. On mobile, opened explanations appear within the page flow. Escape and outside clicks dismiss enhanced panels.
+The layout uses flexible grids and wrapping navigation, with compact work cards in three desktop columns, two tablet columns, and one mobile column. Each card has a single full-card link with a visible keyboard outline; fine-pointer hover adds a subtle 2px lift and shadow. Reduced-motion preferences disable both the lift and transitions. Paragraphs stay within 70ch, and employer responsibility bullets within 65ch. Responsibilities and emphasized technology keywords render directly in HTML without toggles or scripting. Major section padding is 64px on desktop and 48px on mobile to preserve compact reading.
 
-Mobile uses a fixed floating glass navigation bar with Home, Work, Career, CV, and Contact. Native links work without scripting, while a passive, frame-throttled scroll handler updates the active section. The bar has an opaque fallback, bounded backdrop blur where supported, visible focus indicators, and safe-area offsets. Page padding reserves space so the dock does not obscure the final content. The compact mobile hero pairs an 88px portrait with the name and role, uses a short introduction, and puts full impact details behind a native expandable control. Desktop keeps the fuller introduction and outcomes.
+Mobile uses a fixed floating glass navigation bar with Home, Work, Career, CV, and Contact. Native links work without scripting, while a passive, frame-throttled scroll handler updates the active section. The bar has an opaque fallback, bounded backdrop blur where supported, visible focus indicators, and safe-area offsets. Page padding reserves space so the dock does not obscure the final content. The compact mobile hero pairs an 88px portrait with the name and role and uses a short introduction. Career outcomes are always visible in three desktop columns and stacked mobile groups, with larger numeric anchors and scoped measurement notes. The CV page has a prominent Back to Portfolio action. Contact keeps the email button and displays a selectable address with a copy action and accessible feedback.
 
 There is no animation loop, external font request, or runtime service dependency. The local 400px WebP portrait is about 15 KB, and all homepage interaction scripts combined are under 3 KB. Tests keep HTML/CSS/font/script below 100 KiB and all homepage assets including the portrait below 135 KiB. Tailwind was removed because the design uses custom CSS throughout. The impact summary presents growth, cost, latency, and production outcomes from distinct initiatives without adding their percentages. Dated review/presentation counters are omitted.
 

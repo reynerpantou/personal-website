@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
 import { resolve, join, relative } from 'node:path';
 import { parse } from 'parse5';
+import { runInNewContext } from 'node:vm';
 
 const root = resolve('dist');
 const origin = 'https://reynerpantou.com';
@@ -79,16 +80,15 @@ test('homepage exposes every section and describes delivered ownership', () => {
   assert.match(migration, /Technical impact/);
 });
 
-test('experience explanations remain accessible without JavaScript and the portrait is local', () => {
+test('experience responsibilities are visible without JavaScript and the portrait is local', () => {
   const home = pages.get('/');
-  const details = home.filter(node => node.tagName === 'details' && attr(node, 'class') === 'inline-info');
-  assert.ok(details.length > 0);
-  for (const detail of details) {
-    assert.equal(attr(detail, 'open'), undefined, 'Details start compact');
-    const children = nodes(detail);
-    assert.ok(children.some(node => node.tagName === 'summary'));
-    assert.ok(children.some(node => attr(node, 'class') === 'info-panel' && pageText(nodes(node)).trim().length > 20));
+  for (const company of ['ByteDance', 'Tokopedia']) {
+    const list = home.find(node => node.tagName === 'ul' && attr(node, 'aria-label') === `${company} responsibilities`);
+    assert.ok(list);
+    assert.ok(nodes(list).some(node => node.tagName === 'li' && pageText(nodes(node)).trim().length > 20));
+    assert.ok(nodes(list).some(node => node.tagName === 'strong'));
   }
+  assert.ok(!home.some(node => node.tagName === 'details' || node.tagName === 'summary'));
   const portrait = home.find(node => node.tagName === 'img');
   assert.equal(attr(portrait, 'src'), '/reyner-pantou.webp');
   assert.equal(attr(portrait, 'alt'), 'Portrait of Reyner Pantou');
@@ -115,10 +115,12 @@ test('mobile navigation reaches home sections consistently from every page', () 
     const viewport = elements.find(node => node.tagName === 'meta' && attr(node, 'name') === 'viewport');
     assert.match(attr(viewport, 'content'), /viewport-fit=cover/);
   }
-  const impact = pages.get('/').find(node => node.tagName === 'details' && attr(node, 'class') === 'impact-details');
+  const impact = pages.get('/').find(node => attr(node, 'class') === 'career-impact');
   assert.ok(impact);
-  assert.equal(attr(impact, 'open'), undefined);
-  assert.match(pageText(nodes(impact)), /View all outcomes/);
+  assert.equal(nodes(impact).filter(node => node.tagName === 'dl').length, 3);
+  assert.match(pageText(nodes(impact)), /Commerce Growth/);
+  assert.match(pageText(nodes(impact)), /Operating Efficiency/);
+  assert.match(pageText(nodes(impact)), /Production Delivery/);
   assert.match(pageText(nodes(impact)), /High-Value User Coupon Experiment/);
 });
 
@@ -142,6 +144,53 @@ test('the CV is a real PDF copied unchanged and has view/download links', async 
   const cv = pages.get('/cv/');
   assert.ok(cv.some(node => node.tagName === 'object' && attr(node, 'data') === '/cv/reyner-pantou-cv.pdf' && attr(node, 'type') === 'application/pdf'));
   assert.ok(cv.some(node => node.tagName === 'a' && attr(node, 'href') === '/cv/reyner-pantou-cv.pdf' && attr(node, 'download')));
+  assert.ok(cv.some(node => node.tagName === 'a' && attr(node, 'href') === '/#resume' && /Back to Portfolio/.test(pageText(nodes(node)))));
+});
+
+test('email copying reports success and supports manual copying when clipboard access fails', async () => {
+  const home = pages.get('/');
+  const address = home.find(node => attr(node, 'id') === 'contact-email');
+  const copy = home.find(node => node.tagName === 'button' && attr(node, 'aria-label') === 'Copy email address');
+  const email = pageText(nodes(address)).trim();
+  assert.equal(attr(copy, 'type'), 'button');
+  assert.equal(attr(copy, 'data-email'), email);
+  assert.equal(attr(copy, 'hidden'), '', 'Copy control stays hidden without scripting; address remains readable');
+  assert.ok(home.some(node => attr(node, 'role') === 'status' && attr(node, 'aria-live') === 'polite'));
+  const scripts = await Promise.all(home.filter(node => node.tagName === 'script' && attr(node, 'type') === 'module').map(async node => {
+    const src = attr(node, 'src');
+    return src ? readFile(join(root, new URL(src, origin).pathname), 'utf8') : pageText(nodes(node));
+  }));
+  const code = scripts.find(script => script.includes('clipboard'));
+  assert.ok(code, 'Shipped clipboard enhancement must be exercised');
+  for (const scenario of ['success', 'denied', 'unavailable']) {
+    let click, copied, selected = false;
+    const button = { hidden: true, disabled: false, dataset: { email }, addEventListener: (_, handler) => { click = handler; } };
+    const status = { textContent: '' };
+    const emailNode = {};
+    const clipboard = scenario === 'unavailable' ? undefined : { writeText: async value => {
+      if (scenario === 'denied') throw new Error('Clipboard permission denied');
+      copied = value;
+    } };
+    runInNewContext(code, {
+      navigator: { clipboard },
+      document: {
+        querySelector: selector => selector === '.copy-email' ? button : status,
+        getElementById: () => emailNode,
+        createRange: () => ({ selectNodeContents: value => { assert.equal(value, emailNode); } }),
+      },
+      window: { getSelection: () => ({ removeAllRanges() {}, addRange() { selected = true; } }) },
+    });
+    assert.equal(button.hidden, false);
+    await click();
+    assert.equal(button.disabled, false, `${scenario}: control must remain usable`);
+    if (scenario === 'success') {
+      assert.equal(copied, email);
+      assert.equal(status.textContent, 'Email copied.');
+    } else {
+      assert.equal(selected, true);
+      assert.match(status.textContent, /copy the email address/i);
+    }
+  }
 });
 
 test('Cloudflare Pages output is static and allows the CV to embed on the same origin', async () => {
@@ -151,7 +200,7 @@ test('Cloudflare Pages output is static and allows the CV to embed on the same o
   assert.ok(!files.some(file => /(?:^|[/\\])(?:_worker\.js|functions|server)(?:[/\\]|$)/.test(relative(root, file))));
   for (const [route, elements] of pages) {
     const interactive = elements.filter(node => node.tagName === 'script' && attr(node, 'type') !== 'application/ld+json');
-    assert.equal(interactive.length, route === '/' ? 3 : 1, 'Only small navigation and details enhancements are shipped');
+    assert.equal(interactive.length, route === '/' ? 2 : 1, 'Only small navigation and email-copy enhancements are shipped');
     for (const script of interactive) assert.equal(attr(script, 'type'), 'module');
   }
 });
