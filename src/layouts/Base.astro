@@ -33,7 +33,7 @@ const links = [{ label: 'Work', id: 'work' }, { label: 'Experience', id: 'experi
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <header class="site-header">
+    <header class:list={['site-header', { 'site-header-home': home }]}>
       <div class="shell header-inner">
         <a class="wordmark" href="/" aria-label="Reyner Pantou, home"><span class="monogram" aria-hidden="true">RP</span>Reyner Pantou</a>
         <nav class="desktop-nav" aria-label="Main navigation">
