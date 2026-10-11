@@ -25,7 +25,7 @@
   --font-mono: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace;
 }
 * { box-sizing: border-box; }
-html { scroll-padding-top: 110px; }
+html { scroll-padding-top: 110px; scroll-behavior: smooth; }
 body { margin: 0; background: var(--background); color: var(--text); font-family: var(--font-sans); font-size: 16px; line-height: 1.75; -webkit-font-smoothing: antialiased; }
 ::selection { background: var(--accent); color: var(--background); }
 a { color: inherit; text-decoration: none; }
@@ -293,5 +293,6 @@ nav .nav-contact { color: var(--accent); }
   .desktop-break { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
   *, *::before, *::after { transition-duration: 0s !important; animation-duration: 0s !important; }
 }
