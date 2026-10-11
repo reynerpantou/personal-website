@@ -1,0 +1,20 @@
+---
+import Base from '../../layouts/Base.astro';
+import Arrow from '../../components/Arrow.astro';
+import { projects } from '../../data/site';
+export function getStaticPaths() {
+  return projects.map(project => ({ params: { slug: project.slug }, props: { project } }));
+}
+const { project } = Astro.props;
+const nextProject = projects[(projects.findIndex(item => item.slug === project.slug) + 1) % projects.length];
+---
+<Base title={project.title} description={project.summary}>
+  <article class="detail-page">
+    <a class="back-link" href="/#work"><span aria-hidden="true">←</span> Selected work</a>
+    <header class="detail-header"><span class="eyebrow">{project.category} <span class="separator">/</span> {project.status}</span><h1>{project.title}</h1><p class="detail-intro">{project.intro}</p><ul class="tags">{project.tags.map(tag => <li>{tag}</li>)}</ul></header>
+    <section class="detail-section"><h2>The context</h2><p>{project.context}</p></section>
+    <section class="detail-section"><h2>The engineering focus</h2><div class="focus-list">{project.focus.map(([title, body], index) => <div class="focus-item"><span class="eyebrow">0{index + 1}</span><div><h3>{title}</h3><p>{body}</p></div></div>)}</div></section>
+    <section class="detail-section takeaway"><span class="eyebrow">THE TAKEAWAY</span><p>{project.takeaway}</p></section>
+    <a class="next-project" href={`/work/${nextProject.slug}/`}><div><span class="eyebrow">NEXT PROJECT</span><h2>{nextProject.title}</h2></div><Arrow /></a>
+  </article>
+</Base>

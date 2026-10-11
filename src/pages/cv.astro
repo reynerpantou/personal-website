@@ -1,0 +1,13 @@
+---
+import Base from '../layouts/Base.astro';
+import Arrow from '../components/Arrow.astro';
+import { profile } from '../data/site';
+---
+<Base title="Curriculum Vitae" description="View or download Reyner Pantou’s CV: software engineering experience, skills, and education.">
+  <article class="cv-page">
+    <a class="back-link" href="/#resume"><span aria-hidden="true">←</span> Back to home</a>
+    <header class="cv-header"><div><span class="eyebrow">CURRICULUM VITAE</span><h1>Experience, at a glance.</h1><p>Reyner Pantou · Senior Software Engineer</p></div><a class="button button-primary" href={profile.cv} download="Reyner-Pantou-CV.pdf">Download PDF <Arrow diagonal /></a></header>
+    <p class="cv-fallback">Prefer a separate window? <a href={profile.cv} target="_blank" rel="noopener noreferrer">Open the PDF <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></p>
+    <object class="cv-viewer" data={profile.cv} type="application/pdf" aria-label="Reyner Pantou’s CV PDF"><p>Your browser does not support an embedded PDF preview. <a href={profile.cv}>Open the CV PDF</a> or use the download button above.</p></object>
+  </article>
+</Base>
