@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+<Base title="When a useful response isn’t a good cache entry" description="An engineering note on partial results and cache behavior in BookCabin, a Go flight search aggregator.">
+  <article class="detail-page writing-detail">
+    <a class="back-link" href="/#writing"><span aria-hidden="true">←</span> All notes</a>
+    <header class="detail-header"><span class="eyebrow">SYSTEM DESIGN <span class="separator">/</span> 3 MIN READ</span><h1>When a useful response isn’t a good cache entry.</h1><p class="detail-intro">A flight search can still be useful when one provider fails. That doesn’t mean its response should become the answer to the next request.</p><p class="article-byline">An engineering note from the BookCabin project.</p></header>
+    <div class="prose">
+      <h2>A small cache, a bigger decision</h2><p>BookCabin queries four mocked airline providers and brings their results into one model. An in-memory cache keeps successful search results for one minute. Its key includes the route, date, and cabin class; user filters are applied after the cache lookup.</p><p>This keeps the cache useful across different price ranges and sort orders. But it introduces a question: what should happen when a provider doesn’t respond?</p>
+      <h2>Useful now, incomplete later</h2><p>Imagine three providers respond and the fourth times out. Returning the available flights can be better than failing the entire search. The response is useful, but it is incomplete.</p><p>If that response is cached, the next user can receive the same incomplete set even when all four providers are healthy again. A temporary provider failure has effectively become a one-minute visibility problem.</p>
+      <blockquote>A response can be good enough to return without being complete enough to reuse.</blockquote>
+      <h2>Keep the two decisions separate</h2><p>BookCabin returns partial results but does not cache them. A later request gets another chance to query the providers. Complete results can enter the cache as usual.</p><p>That policy trades some extra provider calls for an opportunity to recover quickly. It works alongside per-provider rate limiting and retry behavior, rather than treating the cache as the only protection against load.</p>
+      <div class="article-callout"><span class="eyebrow">THE POLICY</span><ul><li>Complete result: return it and allow caching.</li><li>Partial result: return what is available and skip the cache.</li><li>No usable result: return a failure rather than a successful empty response.</li></ul></div>
+      <h2>There is no universal cache policy</h2><p>A different system might cache partial results briefly, carry completeness metadata, or retain a previously complete response as a fallback. The choice depends on how much completeness matters, how expensive provider calls are, and what users expect.</p><p>The useful design habit is to separate “can I return this?” from “should I reuse this?” Once those questions are explicit, the trade-off becomes easier to reason about.</p>
+      <p class="article-source">Implementation and design details: <a href="https://github.com/reynerpantou/bookcabin" target="_blank" rel="noopener noreferrer">BookCabin on GitHub<span class="sr-only"> (opens in a new tab)</span> ↗</a>.</p>
+    </div>
+  </article>
+</Base>

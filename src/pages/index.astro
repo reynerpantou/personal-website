@@ -1,0 +1,61 @@
+---
+import Base from '../layouts/Base.astro';
+import Arrow from '../components/Arrow.astro';
+import { profile, projects } from '../data/site';
+---
+<Base home>
+  <section class="hero" aria-labelledby="intro-title">
+    <div class="hero-topline"><span class="eyebrow"><span class="small-dot" aria-hidden="true"></span> REYNER PANTOU / BACKEND ENGINEER</span><span class="location">Jakarta, Indonesia <span aria-hidden="true">↗</span></span></div>
+    <h1 id="intro-title">Making complex<br />systems <span>feel simple.</span></h1>
+    <div class="hero-bottom">
+      <div class="hero-copy">
+        <p>I build reliable backends for the moments that matter. Five years in search and commerce at Tokopedia and ByteDance, with Go at the core.</p>
+        <div class="hero-actions"><a class="button button-primary" href="#work">Explore my work <Arrow /></a><a class="text-link" href={profile.github} target="_blank" rel="noopener noreferrer">GitHub <Arrow diagonal /><span class="sr-only"> (opens in a new tab)</span></a></div>
+      </div>
+      <div class="engineering-note" aria-label="Engineering focus: clear contracts, resilient services, useful outcomes">
+        <span class="eyebrow">A FEW THINGS I CARE ABOUT</span>
+        <div><span class="note-index">01</span> Clear contracts</div>
+        <div><span class="note-index">02</span> Resilient services</div>
+        <div><span class="note-index">03</span> Useful outcomes</div>
+      </div>
+    </div>
+    <div class="hero-footnote"><span>PREVIOUSLY AT</span><span>Tokopedia <span class="separator">/</span> ByteDance</span><a href="#work" aria-label="Scroll to selected work"><span aria-hidden="true">↓</span></a></div>
+  </section>
+
+  <section id="work" class="section-grid" aria-labelledby="work-title">
+    <div class="section-label"><span class="eyebrow">01 / SELECTED WORK</span></div>
+    <div>
+      <div class="section-heading"><h2 id="work-title">Built with purpose.</h2><p>Production systems, personal projects,<br class="desktop-break" /> and the thinking behind them.</p></div>
+      <div class="project-list">
+        {projects.map(project => <a class="project-row group" href={`/work/${project.slug}/`}>
+          <div class="project-number" aria-hidden="true">{project.number}</div>
+          <div class="project-content"><span class="eyebrow project-category">{project.category}</span><h3>{project.title}</h3><p>{project.summary}</p><ul class="tags" aria-label="Project focus">{project.tags.map(tag => <li>{tag}</li>)}</ul></div>
+          <Arrow diagonal class="project-arrow transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+        </a>)}
+      </div>
+    </div>
+  </section>
+
+  <section id="experience" class="section-grid" aria-labelledby="experience-title">
+    <div class="section-label"><span class="eyebrow">02 / EXPERIENCE</span></div>
+    <div>
+      <div class="section-heading"><h2 id="experience-title">Grounded in real systems.</h2><p>From search infrastructure to cross-platform integration.</p></div>
+      <article class="experience-row"><div class="experience-meta"><span class="eyebrow">2021 — 2026</span><span class="experience-duration">5 years</span></div><div><h3>Tokopedia → ByteDance</h3><p class="role">Backend Engineering · Search</p><p>Worked on the search results platform, connecting search and ads with the commerce experience. Contributed to the Tokopedia × TikTok Shop integration and the migration of services to ByteCloud.</p><p>Beyond implementation: service design, performance troubleshooting, mentoring, and keeping production systems running.</p><a class="text-link" href="/work/commerce-search/">More about the work <Arrow /></a></div></article>
+      <div class="stack-line"><span class="eyebrow">MY TOOLKIT</span><p>Go <span>·</span> Elasticsearch <span>·</span> Redis <span>·</span> PostgreSQL <span>·</span> Kafka <span>·</span> gRPC</p></div>
+    </div>
+  </section>
+
+  <section id="writing" class="section-grid" aria-labelledby="writing-title">
+    <div class="section-label"><span class="eyebrow">03 / WRITING</span></div>
+    <div><div class="section-heading"><h2 id="writing-title">Notes from the backend.</h2><p>Small decisions. Interesting trade-offs.</p></div>
+      <a class="writing-row group" href="/writing/caching-partial-results/"><div><span class="eyebrow">SYSTEM DESIGN <span class="separator">/</span> 3 MIN READ</span><h3>When a useful response<br />isn’t a good cache entry.</h3><p>A closer look at partial results, provider failures, and cache behavior in a flight search aggregator.</p></div><Arrow diagonal class="project-arrow transition-transform duration-200 group-hover:translate-x-0.5" /></a>
+    </div>
+  </section>
+
+  <section id="about" class="section-grid" aria-labelledby="about-title">
+    <div class="section-label"><span class="eyebrow">04 / ABOUT</span></div>
+    <div class="about-content"><div class="section-heading"><h2 id="about-title">An engineer.<br />Always a curious person.</h2></div><div class="about-columns"><div><p>I’m Reyner, a backend engineer based in Jakarta, originally from Surabaya. I like turning complicated problems into systems people can understand and depend on.</p><p>My experience is rooted in search and distributed systems. I care about the details behind a good experience: clear APIs, predictable behavior, and software that is easier to operate.</p></div><div class="about-aside"><span class="eyebrow">OUTSIDE THE DAY JOB</span><p>Building small products, exploring new ideas, and learning by making things.</p><span class="eyebrow">EDUCATION</span><p>B.Sc. in Computer Science<br />Petra Christian University<br /><span class="muted">2017 — 2021</span></p></div></div></div>
+  </section>
+
+  <section id="contact" class="contact-section" aria-labelledby="contact-title"><div class="contact-top"><span class="eyebrow">05 / GET IN TOUCH</span><span class="contact-location">BASED IN JAKARTA · OPEN TO CONVERSATIONS</span></div><h2 id="contact-title">Good systems start<br />with a <span>conversation.</span></h2><div class="contact-bottom"><p>Have an interesting engineering problem,<br class="desktop-break" /> a project, or an opportunity in mind?</p><a class="button button-primary" href={profile.github} target="_blank" rel="noopener noreferrer">Find me on GitHub <Arrow diagonal /><span class="sr-only"> (opens in a new tab)</span></a></div></section>
+</Base>

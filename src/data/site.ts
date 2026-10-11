@@ -1,0 +1,62 @@
+export const profile = {
+  name: 'Reyner Pantou',
+  role: 'Senior Backend Engineer',
+  location: 'Jakarta, Indonesia',
+  github: 'https://github.com/reynerpantou',
+  description: 'Reyner Pantou is a backend engineer in Jakarta, building reliable search platforms and distributed systems with Go.',
+};
+
+export const projects = [
+  {
+    slug: 'commerce-search',
+    number: '01',
+    title: 'Search at commerce scale',
+    category: 'PRODUCTION SYSTEMS',
+    summary: 'Connecting search, ads, and commerce across Tokopedia and TikTok Shop.',
+    tags: ['Go', 'Search', 'Distributed systems'],
+    status: 'Professional work',
+    intro: 'Search is where a shopper’s intent meets a marketplace. My work at Tokopedia and ByteDance focused on the backend systems behind that experience: coordinating services, integrating platforms, and making changes safely.',
+    context: 'Across five years at Tokopedia and ByteDance, I worked on the search results platform and its integration with TikTok Shop. The engineering challenge was to keep a familiar shopping experience reliable while the systems underneath it evolved.',
+    focus: [
+      ['Service orchestration', 'Coordinate search and advertising services, then map their responses into a consistent commerce experience.'],
+      ['Platform integration', 'Connect Tokopedia and TikTok Shop search flows while accounting for differences between their service contracts.'],
+      ['Infrastructure migration', 'Move services to ByteCloud with attention to latency, operational behavior, and rollout safety.'],
+    ],
+    takeaway: 'A successful migration is more than a new endpoint. It requires clear ownership, observable behavior, and a rollout that makes failures understandable before they become widespread.',
+  },
+  {
+    slug: 'bookcabin',
+    number: '02',
+    title: 'One search. Four airlines.',
+    category: 'OPEN-SOURCE PROJECT',
+    summary: 'A flight search aggregator that brings inconsistent provider data into one reliable result.',
+    tags: ['Go', 'Concurrency', 'API design'],
+    status: 'Source available',
+    repository: 'https://github.com/reynerpantou/bookcabin',
+    intro: 'BookCabin is a Go flight search service that queries four mocked airline providers concurrently, normalizes their responses, and returns filtered, de-duplicated, ranked results.',
+    context: 'Airline APIs do not always agree on data formats, time zones, or even trip duration. This project explores how to build a predictable search interface on top of those differences. It uses mocked providers rather than live airline integrations.',
+    focus: [
+      ['Concurrent provider calls', 'Fan out requests under a global timeout, with per-provider rate limits and retries with exponential backoff and jitter.'],
+      ['Consistent flight data', 'Normalize time formats, calculate duration from timestamps, and de-duplicate matching flights while keeping the cheapest option.'],
+      ['Useful ranking', 'Combine normalized price, duration, and stop count into a best-value score. Support one-way, round-trip, and multi-city requests.'],
+    ],
+    takeaway: 'Resilience and data quality belong in the design from the beginning. Partial results can still help a user, but they should not quietly become the cached answer for the next request.',
+  },
+  {
+    slug: 'financial-tracker',
+    number: '03',
+    title: 'A clearer view of everyday money.',
+    category: 'IN PROGRESS',
+    summary: 'Exploring a focused financial tracker, starting with the transaction ledger.',
+    tags: ['Product thinking', 'Data modeling'],
+    status: 'In development',
+    intro: 'A personal project exploring a simple financial tracker. The first version is intentionally focused on the foundations of recording and understanding everyday transactions.',
+    context: 'This is a work in progress, not a released product. The starting point is a transaction ledger and a small, understandable set of financial tracking features.',
+    focus: [
+      ['A focused first version', 'Prioritize the financial tracker itself before expanding into additional features.'],
+      ['A sound ledger', 'Explore how transactions should be recorded, categorized, and kept consistent.'],
+      ['Room to grow', 'Keep the first implementation manageable while leaving room to evolve the application as usage grows.'],
+    ],
+    takeaway: 'The current goal is a useful, focused first version. Implementation details and a public demo will follow as the project develops.',
+  },
+];
