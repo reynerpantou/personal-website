@@ -1,5 +1,4 @@
 ---
-import '@fontsource-variable/inter';
 import '../styles/global.css';
 import { profile } from '../data/site';
 interface Props { title?: string; description?: string; home?: boolean; noindex?: boolean; canonicalPath?: string }
@@ -13,7 +12,7 @@ const links = [{ label: 'Work', id: 'work' }, { label: 'Experience', id: 'experi
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#f7f6f2" />
+    <meta name="theme-color" content="#111512" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex" />}
@@ -27,7 +26,7 @@ const links = [{ label: 'Work', id: 'work' }, { label: 'Experience', id: 'experi
     <meta property="og:image" content={new URL('/social-card.png', Astro.site)} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Reyner Pantou — Making complex systems feel simple." />
+    <meta property="og:image:alt" content="Reyner Pantou — Backend engineer working with Go, search, and distributed systems." />
     <meta name="twitter:card" content="summary_large_image" />
     <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@type': 'Person', name: profile.name, url: Astro.site, jobTitle: profile.role, sameAs: [profile.linkedin] })} />
   </head>
@@ -35,17 +34,17 @@ const links = [{ label: 'Work', id: 'work' }, { label: 'Experience', id: 'experi
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
       <div class="shell header-inner">
-        <a class="wordmark" href="/" aria-label="Reyner Pantou, home">reyner<span class="brand-dot">.</span></a>
+        <a class="wordmark" href="/" aria-label="Reyner Pantou, home"><span class="monogram" aria-hidden="true">RP</span>Reyner Pantou</a>
         <nav aria-label="Main navigation">
           {links.map(link => <a href={`${home ? '' : '/'}#${link.id}`}>{link.label}</a>)}
-          <a class="nav-contact" href={`${home ? '' : '/'}#contact`}>Let’s talk <span aria-hidden="true">↗</span></a>
+          <a class="nav-contact" href={`${home ? '' : '/'}#contact`}>Contact</a>
         </nav>
       </div>
     </header>
     <main id="main" class="shell"><slot /></main>
     <footer class="shell footer">
       <p>© {new Date().getFullYear()} Reyner Pantou</p>
-      <p>Built with care. Kept simple.</p>
+      <p>Go · Search · Distributed systems</p>
       <a href={`mailto:${profile.email}`}>Email <span aria-hidden="true">↗</span></a>
     </footer>
   </body>
