@@ -1,6 +1,6 @@
 # Reyner Pantou — Personal Website
 
-An English-language professional portfolio built with Astro and plain CSS. All pages are generated as static HTML for **Cloudflare Pages**, with soft charcoal surfaces, muted sage accents, and one locally hosted Latin Inter variable font.
+An English-language professional portfolio built with Astro and plain CSS. All pages are generated as static HTML for **Cloudflare Pages**, with charcoal backgrounds, warm amber actions, sky blue and coral panels, and one locally hosted Latin Inter variable font.
 
 ## Run locally
 
@@ -42,7 +42,7 @@ In Cloudflare, choose **Workers & Pages → Create application → Pages → Con
 | Root directory | Repository root |
 | Node version | `24` (`.node-version`, or build variable `NODE_VERSION=24`) |
 
-The redesign is on `feat/readable-dark-portfolio` for review. Cloudflare Pages can create branch previews once Git integration is connected; merging the pull request deploys it to production when automatic builds are enabled.
+Cloudflare Pages can create branch previews once Git integration is connected; merging a pull request deploys it to production when automatic builds are enabled.
 
 There are no Pages Functions, server-rendered routes, or Worker entrypoints. `astro.config.mjs` explicitly uses `output: 'static'`; Cloudflare serves only generated files from `dist/`. The output includes `404.html` for normal static-site 404 behavior rather than a single-page-app fallback, plus `_headers` for response headers. Same-origin framing is allowed so the CV can be embedded.
 
@@ -66,4 +66,4 @@ GitHub Actions runs type checking, the production build, and generated-site test
 
 The layout uses flexible grids and wrapping navigation, with a mobile breakpoint at 700px. Body text stays at 16px, links have visible keyboard focus, navigation and action links have touch targets of at least 44px, and reduced-motion preferences disable transitions. There is no client JavaScript, animation loop, external font request, or image download on the homepage. Tailwind was removed because the design uses custom CSS throughout.
 
-Tests also enforce WCAG AA contrast ratios for text colors on both dark surfaces and a 100 KiB combined budget for the homepage HTML, shared CSS, and font. These checks do not replace browser testing. Browser visual QA across phone, tablet, and desktop sizes and Lighthouse measurements are still needed before claiming measured accessibility conformance or Core Web Vitals results.
+Tests also enforce WCAG AA contrast ratios for text colors on neutral and colored surfaces and a 100 KiB combined budget for the homepage HTML, shared CSS, and font. These checks do not replace browser testing. Browser visual QA across phone, tablet, and desktop sizes and Lighthouse measurements are still needed before claiming measured accessibility conformance or Core Web Vitals results.
