@@ -220,6 +220,7 @@ nav .nav-contact { color: var(--accent); }
   html { scroll-padding-top: 16px; scroll-padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px)); }
   body { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   .site-header { position: static; }
+  .site-header-home { display: none; }
   .shell { padding-inline: 20px; }
   .header-inner { min-height: 60px; padding-block: 8px; }
   .wordmark { font-size: 13px; }
