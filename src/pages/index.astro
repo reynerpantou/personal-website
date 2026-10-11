@@ -2,7 +2,8 @@
 import Base from '../layouts/Base.astro';
 import Arrow from '../components/Arrow.astro';
 import WorkIcon from '../components/WorkIcon.astro';
-import InlineInfo from '../components/InlineInfo.astro';
+import HighlightedText from '../components/HighlightedText.astro';
+import CopyEmail from '../components/CopyEmail.astro';
 import { profile, projects, highlights, experience } from '../data/site';
 const toolkit = ['Go', 'Elasticsearch', 'Redis', 'PostgreSQL', 'Kafka', 'gRPC'];
 ---
@@ -14,15 +15,12 @@ const toolkit = ['Go', 'Elasticsearch', 'Redis', 'PostgreSQL', 'Kafka', 'gRPC'];
       <p class="hero-subtitle">I build search APIs<br class="desktop-break" /> <span>from design to production.</span></p>
       <p class="hero-description desktop-intro">{profile.introduction}</p>
       <p class="hero-description mobile-intro">Five years at Tokopedia and ByteDance. I build user-facing search APIs, engine integrations, and commerce experiences with Go.</p>
-      <div class="hero-actions"><a class="button button-primary" href="#work">Explore my work <Arrow /></a><a class="button button-secondary" href="/cv/">View CV <Arrow diagonal /></a></div>
+      <div class="hero-actions"><a class="button button-primary" href="#work">Explore my work <Arrow /></a><a class="button button-ghost" href="/cv/">View CV <Arrow diagonal /></a></div>
     </div>
     <figure class="portrait"><img src="/reyner-pantou.webp" alt="Portrait of Reyner Pantou" width="400" height="400" fetchpriority="high" decoding="async" /><figcaption>Go · Search APIs · Distributed systems</figcaption></figure>
     <div class="hero-history"><span class="eyebrow">Previously at</span><span><span class="company-tokopedia">Tokopedia</span> <span class="separator" aria-hidden="true">/</span> <span class="company-bytedance">ByteDance</span></span><span class="history-detail">2021 — 2026</span></div>
-    <div class="mobile-impact-preview" aria-label="Selected career outcomes"><p><strong>$288K/year</strong> Annualized Elasticsearch Savings</p><p><strong>+18.5%</strong> Search GMV · TikTok Search Platform Integration</p></div>
-    <details class="impact-details"><summary><span class="impact-open-label">View all outcomes</span><span class="impact-close-label">Hide outcomes</span><span aria-hidden="true">⌄</span></summary>
-      <div class="career-impact" aria-label="Career impact across delivered initiatives">{highlights.map(item => <div><h2>{item.label}</h2><p class="impact-summary">{item.summary}</p><dl>{item.results.map(([result, scope]) => <div><dt>{result}</dt><dd>{scope}</dd></div>)}</dl></div>)}</div>
-      <p class="impact-scope">Selected outcomes across my career. Each figure belongs to its own initiative or experiment; results are not cumulative.</p>
-    </details>
+    <div class="career-impact" aria-label="Career impact across delivered initiatives">{highlights.map(item => <div><h2>{item.label}</h2><p class="impact-summary">{item.summary}</p><dl>{item.results.map(result => <div><dt><strong>{result.value}</strong><span>{result.label}</span></dt><dd>{result.context}</dd></div>)}</dl></div>)}</div>
+    <p class="impact-scope">Selected outcomes across my career. Each figure belongs to its own initiative or experiment; results are not cumulative.</p>
   </section>
 
   <section id="work" class="section" aria-labelledby="work-title">
@@ -39,7 +37,7 @@ const toolkit = ['Go', 'Elasticsearch', 'Redis', 'PostgreSQL', 'Kafka', 'gRPC'];
 
   <section id="experience" class="section" aria-labelledby="experience-title">
     <div class="section-heading"><div><p class="eyebrow">02 / Experience</p><h2 id="experience-title">Ownership through delivery.</h2></div><p>Architecture, execution,<br class="desktop-break" /> and production accountability.</p></div>
-    {experience.map(item => <article class="experience-row"><div class="experience-meta"><span class="experience-date">{item.dates}</span><span class="muted">{item.company}</span></div><div class="experience-body"><h3>{item.scope}</h3><p class="role">{item.role}</p><p>{item.description}</p><div class="experience-details" aria-label={`${item.company} responsibility details`}>{item.details.map(([title, body]) => <InlineInfo title={title} body={body} />)}</div></div></article>)}
+    {experience.map(item => <article class="experience-row"><div class="experience-meta"><span class="experience-date">{item.dates}</span><span class="muted">{item.company}</span></div><div class="experience-body"><h3>{item.scope}</h3><p class="role">{item.role}</p><p>{item.description}</p><ul class="experience-points" aria-label={`${item.company} responsibilities`}>{item.responsibilities.map(([title, body]) => <li><strong>{title}.</strong> <HighlightedText text={body} /></li>)}</ul></div></article>)}
     <div class="toolkit"><p class="eyebrow">Tools I work with</p><ul aria-label="Engineering toolkit">{toolkit.map(tool => <li>{tool}</li>)}</ul></div>
   </section>
 
@@ -50,12 +48,5 @@ const toolkit = ['Go', 'Elasticsearch', 'Redis', 'PostgreSQL', 'Kafka', 'gRPC'];
 
   <section id="resume" class="resume-panel" aria-labelledby="resume-title"><div><p class="eyebrow">04 / Curriculum vitae</p><h2 id="resume-title">The full picture.</h2><p>My experience, skills, and education in one PDF.</p></div><div class="resume-actions"><a class="button button-primary" href="/cv/">View CV <Arrow /></a><a class="text-link" href={profile.cv} download="Reyner-Pantou-CV.pdf">Download PDF <Arrow diagonal /></a></div></section>
 
-  <section id="contact" class="contact-section" aria-labelledby="contact-title"><div><p class="eyebrow">05 / Get in touch</p><h2 id="contact-title">Let’s talk.</h2><p>Looking for a backend engineer who can own<br class="desktop-break" /> architecture, delivery, and production outcomes?</p></div><div class="contact-actions"><a class="button button-primary" href={`mailto:${profile.email}`}>Send me an email <Arrow diagonal /></a><a class="text-link" href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn <Arrow diagonal /><span class="sr-only"> (opens in a new tab)</span></a><span class="contact-location">Based in Jakarta, Indonesia</span></div></section>
+  <section id="contact" class="contact-section" aria-labelledby="contact-title"><div><p class="eyebrow">05 / Get in touch</p><h2 id="contact-title">Let’s talk.</h2><p>Looking for a backend engineer who can own<br class="desktop-break" /> architecture, delivery, and production outcomes?</p></div><div class="contact-actions"><a class="button button-primary" href={`mailto:${profile.email}`}>Send me an email <Arrow diagonal /></a><CopyEmail email={profile.email} /><a class="text-link" href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn <Arrow diagonal /><span class="sr-only"> (opens in a new tab)</span></a><span class="contact-location">Based in Jakarta, Indonesia</span></div></section>
 </Base>
-<script>
-  const impact = document.querySelector<HTMLDetailsElement>('.impact-details');
-  const desktop = window.matchMedia('(min-width: 701px)');
-  const sync = () => { if (impact) impact.open = desktop.matches; };
-  desktop.addEventListener('change', sync);
-  sync();
-</script>

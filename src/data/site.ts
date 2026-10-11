@@ -9,27 +9,21 @@ export const profile = {
   introduction: 'Five years at Tokopedia and ByteDance. I owned the user-facing search API layer, connecting organic and advertising engines to shopping experiences—from service design and integration through rollout, governance, and monitoring.',
 };
 
-export const serviceScope = [
-  ['Search API', 'The user-facing API service that coordinates search requests and returns the search experience.'],
-  ['Search Provider', 'The engine aggregator that integrates TikTok organic and advertising engines.'],
-  ['Search Pack', 'The item and component packer that assembles product, video, store, advertising, and promotion content.'],
-];
-
 export const highlights = [
   { label: 'Commerce Growth', summary: 'Search · Ads · Promotions', results: [
-    ['+18.5% Search GMV', 'TikTok Search Platform Integration'],
-    ['+11.06% Search GMV', 'High-Value User Coupon Experiment'],
-    ['+21.69% Pseudo Ad DGMV', 'Separate Ads Experiment'],
+    { value: '+18.5%', label: 'Search GMV', context: 'TikTok Search Platform Integration' },
+    { value: '+11.06%', label: 'Search GMV', context: 'High-Value User Coupon Experiment' },
+    { value: '+21.69%', label: 'Pseudo Ad DGMV', context: 'Separate Ads Experiment' },
   ] },
   { label: 'Operating Efficiency', summary: 'Cost · Latency · Resources', results: [
-    ['$288K/year Elasticsearch Savings', 'Annualized from $24K/month · Combined team program'],
-    ['−54.68% API-Layer Infrastructure Cost', 'ByteCloud Migration & Service Improvements'],
-    ['350 ms Lower Page Latency', 'Migration: 1,200 → 850 ms'],
+    { value: '$288K/year', label: 'Elasticsearch Savings', context: 'Annualized from $24K/month · Combined team program' },
+    { value: '−54.68%', label: 'API-Layer Infrastructure Cost', context: 'ByteCloud Migration & Service Improvements' },
+    { value: '−350 ms', label: 'Page Latency', context: 'Migration: 1,200 → 850 ms' },
   ] },
   { label: 'Production Delivery', summary: 'Integration · Migration · Governance', results: [
-    ['Three API-Layer Services', 'Search API, Search Provider, Search Pack'],
-    ['Zero Reported Cutover Downtime', 'API migration and provider transition'],
-    ['Urgent Policy Fix in Under One Hour', 'P0 incident response'],
+    { value: '3', label: 'API-Layer Services', context: 'Search API, Search Provider, Search Pack' },
+    { value: '0', label: 'Reported Cutover Downtime', context: 'API migration and provider transition' },
+    { value: '<1 hour', label: 'Urgent Policy Fix', context: 'P0 incident response' },
   ] },
 ];
 
@@ -39,11 +33,12 @@ export const experience = [
     role: 'Senior Software Engineer · Search',
     dates: '2024 — 2026',
     scope: 'User-facing search API layer',
-    description: 'Owned Search API, Search Provider, and Search Pack: organic/ad integration, cards, filters, sorting, promotions, tracking, and governance. Led the API-layer ByteCloud migration and service separation.',
-    details: [
-      ...serviceScope,
-      ['Experience & governance', 'Handled engine impressions and event tracking; promotion display, popups, and claims; filters and sorting; product, video, store, and advertising cards; blacklists, interventions, and product-status/moderation handling across the API layer.'],
-      ['Delivery & operations', 'Defined service boundaries and API contracts; aligned Product, Frontend, QA, Data Science, Ads, and platform teams; planned testing and rollback paths; operated experiments, rollout monitoring, and production incident response.'],
+    description: 'Owned the services between TikTok’s search engines and the shopping experience, from architecture and integration through rollout and production operations.',
+    responsibilities: [
+      ['Architecture', 'Built the user-facing layer in **Go**: **Search API** for orchestration, **Search Provider** as the engine aggregator, and **Search Pack** as the item and component packer. Separated services so pack features could deploy independently.'],
+      ['Integration & migration', 'Aggregated TikTok organic and advertising engines, maintained card, filter, and sort contracts, and migrated the API layer to **ByteCloud** with **Kitex** and zero reported cutover downtime.'],
+      ['Commerce & tracking', 'Delivered product, video, store, and ad cards; promotion display, popups, and claims; engine impressions and event tracking. Bonus Promotion experiments reported **+5.7% Main Orders per User**.'],
+      ['Governance & delivery', 'Handled blacklists, interventions, and product-status/moderation rules. Aligned Product, Frontend, QA, Ads, and Data Science on contracts, testing, rollback plans, and experiments; delivered an urgent policy fix in **under one hour**.'],
     ],
   },
   {
@@ -51,12 +46,12 @@ export const experience = [
     role: 'Software Engineer · Search',
     dates: '2021 — 2023',
     scope: 'Search APIs, retrieval, and relevance features',
-    description: 'Delivered search APIs and relevance features across shopping surfaces. Engineering PIC for product-card redesign, Elasticsearch optimization initiatives, and downstream API migrations.',
-    details: [
-      ['Search surfaces', 'Handled product cards, advertisements, filters, sorting, and fine-ranking behavior across Search Result Page, store page, grocery, discovery, and other surfaces.'],
-      ['Retrieval & relevance', 'Worked on retrieval, fine-ranking boosts and deboosts, NLP, and blacklist handling.'],
-      ['Ingestion', 'Limited ingestion-service contributions to process product information before Elasticsearch indexing.'],
-      ['Delivery & quality', 'Coordinated cross-department endpoint migrations, built reusable query and cache abstractions, strengthened integration testing, and supported production operations.'],
+    description: 'Built search APIs across shopping surfaces and served as engineering PIC for product-card contracts, performance improvements, and downstream migrations.',
+    responsibilities: [
+      ['Search & relevance', 'Implemented Search APIs in **Go** across result, store, grocery, and discovery pages: product cards, advertisements, filters, sorting, retrieval, fine-ranking boosts/deboosts, NLP, and blacklists.'],
+      ['Product contracts', 'Standardized organic and advertising product-card contracts with Android, iOS, desktop, and Ads teams, giving other shopping surfaces a shared reference implementation.'],
+      ['Performance & ingestion', 'Optimized **Elasticsearch** queries, mappings, and **Redis** caching within the combined team program reporting **$288K/year annualized savings**. Limited ingestion-service contributions processed product information before indexing.'],
+      ['Delivery & quality', 'Coordinated cross-department endpoint migrations with trackers and mitigation plans; built reusable query/cache abstractions, strengthened integration testing, mentored engineers, and supported production operations.'],
     ],
   },
 ];
