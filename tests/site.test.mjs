@@ -95,11 +95,11 @@ test('Cloudflare Pages output is static and allows the CV to embed on the same o
   }
 });
 
-test('text colors meet WCAG AA contrast on both dark surfaces', async () => {
+test('text colors meet WCAG AA contrast on neutral and colored surfaces', async () => {
   const css = await readFile('src/styles/global.css', 'utf8');
   const tokens = Object.fromEntries([...css.matchAll(/--([a-z-]+):\s*(#[\da-f]{6});/gi)].map(([, name, color]) => [name, color]));
-  for (const background of ['background', 'surface', 'surface-hover']) {
-    for (const foreground of ['text', 'muted', 'accent']) {
+  for (const background of ['background', 'surface', 'surface-hover', 'blue-surface', 'coral-surface', 'amber-surface']) {
+    for (const foreground of ['text', 'muted', 'accent', 'blue', 'coral', 'mint']) {
       const ratio = contrast(tokens[foreground], tokens[background]);
       assert.ok(ratio >= 4.5, `${foreground} on ${background}: ${ratio.toFixed(2)}:1`);
     }
