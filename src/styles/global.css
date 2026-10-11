@@ -51,6 +51,17 @@ nav .nav-contact { color: var(--accent); }
 .hero { padding-top: 56px; display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); column-gap: 56px; align-items: center; }
 .hero h1 { font-size: clamp(40px, 5.5vw, 60px); margin-top: 20px; letter-spacing: -.055em; }
 .hero h1 span { color: var(--accent); }
+.hero h1 .hero-greeting { color: var(--text); }
+.mobile-intro, .mobile-dock, .mobile-impact-preview { display: none; }
+.impact-details { grid-column: 1 / -1; }
+.impact-details > summary { display: none; }
+.impact-close-label { display: none; }
+.impact-details[open] .impact-open-label { display: none; }
+.impact-details[open] .impact-close-label { display: inline; }
+/* Keep desktop outcomes readable when scripting is disabled. */
+@media (min-width: 701px) {
+  .impact-details:not([open]) > summary { display: flex; min-height: 44px; align-items: center; color: var(--accent); cursor: pointer; }
+}
 .hero-subtitle span { color: var(--blue); }
 .hero-subtitle { font-size: clamp(22px, 2.7vw, 29px); line-height: 1.4; margin-top: 18px; letter-spacing: -.025em; color: var(--text); }
 .hero-description { margin-top: 24px; color: var(--muted); max-width: 48ch; }
@@ -206,26 +217,59 @@ nav .nav-contact { color: var(--accent); }
   .resume-panel { flex-wrap: wrap; }
 }
 @media (max-width: 700px) {
-  html { scroll-padding-top: 24px; }
+  html { scroll-padding-top: 16px; scroll-padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px)); }
+  body { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   .site-header { position: static; }
   .shell { padding-inline: 20px; }
-  .header-inner { flex-direction: column; align-items: flex-start; gap: 8px; padding-block: 16px 8px; }
-  nav { width: 100%; gap: 0; justify-content: space-between; }
-  nav a { padding-inline: 8px; font-size: 13px; }
-  .hero { grid-template-columns: minmax(0,1fr); padding-top: 40px; gap: 32px; }
-  .hero h1 { font-size: clamp(40px, 9vw, 56px); }
-  .hero-description { max-width: 54ch; }
-  .portrait { grid-row: 1; justify-self: start; max-width: 150px; }
+  .header-inner { min-height: 60px; padding-block: 8px; }
+  .wordmark { font-size: 13px; }
+  .monogram { width: 30px; height: 30px; font-size: 12px; }
+  .desktop-nav { display: none; }
+  .mobile-dock { position: fixed; z-index: 30; left: max(12px, env(safe-area-inset-left, 0px)); right: max(12px, env(safe-area-inset-right, 0px)); bottom: calc(12px + env(safe-area-inset-bottom, 0px)); width: auto; max-width: 440px; margin-inline: auto; display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 2px; padding: 6px; border: 1px solid #ffffff30; border-radius: 28px; background: #20232cf5; box-shadow: 0 8px 28px #0006, inset 0 1px 0 #ffffff1f; }
+  .mobile-dock a { display: flex; flex-direction: column; gap: 4px; min-width: 0; min-height: 54px; padding: 6px 2px; border-radius: 21px; color: var(--muted); font-size: 10px; line-height: 1.2; font-weight: 500; }
+  .mobile-dock a[aria-current] { color: var(--accent); background: #f2bd711a; box-shadow: inset 0 0 0 1px #f2bd7133; }
+  .mobile-dock a:focus-visible { outline-offset: -2px; border-radius: 21px; }
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .mobile-dock { background: #20232ce8; -webkit-backdrop-filter: blur(14px) saturate(140%); backdrop-filter: blur(14px) saturate(140%); }
+  }
+  .hero { grid-template-columns: 88px minmax(0,1fr); padding-top: 24px; gap: 8px 16px; }
+  .hero-copy { display: contents; }
+  .hero .eyebrow { grid-column: 2; grid-row: 2; font-size: 11px; align-self: start; }
+  .hero h1 { grid-column: 2; grid-row: 1; font-size: clamp(28px, 8vw, 36px); margin: 0; align-self: end; }
+  .hero h1 .hero-greeting { display: none; }
+  .hero-subtitle { grid-column: 1 / -1; margin-top: 18px; font-size: 23px; }
+  .hero-description { grid-column: 1 / -1; max-width: 54ch; margin-top: 8px; }
+  .desktop-intro { display: none; }
+  .mobile-intro { display: block; }
+  .hero-actions { grid-column: 1 / -1; margin-block: 12px 18px; gap: 8px; }
+  .hero-actions .button { padding-inline: 14px; font-size: 13px; }
+  .portrait { grid-column: 1; grid-row: 1 / span 2; justify-self: start; width: 88px; max-width: 88px; }
+  .portrait img { border-radius: 16px; }
   .portrait figcaption { display: none; }
   .hero-history { margin-top: 0; gap: 10px 20px; flex-wrap: wrap; }
   .hero-history .eyebrow { width: 100%; }
+  .hero-history > .eyebrow { display: none; }
   .history-detail { font-size: 12px; }
+  .mobile-impact-preview { grid-column: 1 / -1; display: grid; gap: 6px; color: var(--muted); font-size: 13px; padding-top: 6px; }
+  .mobile-impact-preview strong { color: var(--accent); font-size: 15px; }
+  .impact-details { margin-bottom: 20px; }
+  .impact-details > summary { display: flex; align-items: center; gap: 8px; min-height: 44px; color: var(--blue); font-size: 13px; list-style: none; cursor: pointer; }
+  .impact-details > summary::-webkit-details-marker { display: none; }
+  .impact-details[open] > summary > span:last-child { transform: rotate(180deg); }
   .section { padding-block: 44px; }
   .section-heading { align-items: flex-start; flex-direction: column; gap: 14px; }
   .career-impact, .case-metrics { grid-template-columns: minmax(0,1fr); gap: 22px; }
   .career-impact > div { border-left: 2px solid var(--line); padding-left: 16px; }
   .project-grid { grid-template-columns: minmax(0,1fr); gap: 16px; }
   .project-card { padding: 16px; }
+  .project-card { position: relative; border-top: 1px solid var(--card-line); border-left: 3px solid var(--card-accent); }
+  .project-card h3 { font-size: 17px; }
+  .project-top { margin-bottom: 2px; }
+  .project-icon { display: none; }
+  .project-title { min-height: 40px; }
+  .project-title::after { content: ''; position: absolute; inset: 0; border-radius: 8px; }
+  .project-card > p:not(.project-proof) { font-size: 13px; margin-top: 2px; line-height: 1.5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .project-card .project-proof { padding-top: 10px; }
   .project-top { margin-bottom: 8px; }
   .inline-info { position: static; }
   .inline-info[open] { width: 100%; }

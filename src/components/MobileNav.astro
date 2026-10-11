@@ -1,0 +1,46 @@
+---
+interface Props { home?: boolean }
+const { home = false } = Astro.props;
+const path = Astro.url.pathname;
+const current = path.startsWith('/cv/') ? 'resume' : path.startsWith('/work/') ? 'work' : 'main';
+const links = [
+  { label: 'Home', id: 'main', href: `${home ? '' : '/'}#main`, icon: 'M3 10 12 3l9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z' },
+  { label: 'Work', id: 'work', href: `${home ? '' : '/'}#work`, icon: 'M3 7h18v14H3ZM8 7V3h8v4M3 12h18M10 12v3h4v-3' },
+  { label: 'Career', id: 'experience', href: `${home ? '' : '/'}#experience`, icon: 'M4 7h16M4 12h16M4 17h16M7 4v6M17 9v6M10 14v6' },
+  { label: 'CV', id: 'resume', href: '/cv/', icon: 'M14 3H5v18h14V8Zm0 0v5h5M8 12h8M8 16h6' },
+  { label: 'Contact', id: 'contact', href: `${home ? '' : '/'}#contact`, icon: 'M3 5h18v14H3ZM3 5l9 7 9-7' },
+];
+---
+<nav class="mobile-dock" aria-label="Mobile navigation" data-home={home}>
+  {links.map(link => <a href={link.href} data-section={link.id} aria-current={link.id === current ? (home ? 'location' : 'page') : undefined}><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={link.icon} /></svg><span>{link.label}</span></a>)}
+</nav>
+<script>
+  const dock = document.querySelector<HTMLElement>('.mobile-dock');
+  if (dock?.dataset.home === 'true') {
+    const links = [...dock.querySelectorAll<HTMLAnchorElement>('a')];
+    const sections = ['main', 'work', 'experience', 'about', 'resume', 'contact']
+      .map(id => document.getElementById(id)).filter((item): item is HTMLElement => !!item);
+    const mobile = window.matchMedia('(max-width: 700px)');
+    let queued = false;
+    const update = () => {
+      queued = false;
+      if (!mobile.matches) return;
+      let active = 'main';
+      for (const section of sections) {
+        if (section.getBoundingClientRect().top <= Math.min(180, window.innerHeight * .25)) active = section.id;
+      }
+      if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4) active = 'contact';
+      if (active === 'about') active = 'experience';
+      for (const link of links) {
+        if (link.dataset.section === active) link.setAttribute('aria-current', 'location');
+        else link.removeAttribute('aria-current');
+      }
+    };
+    const schedule = () => { if (!queued) { queued = true; requestAnimationFrame(update); } };
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    window.addEventListener('pageshow', schedule);
+    mobile.addEventListener('change', schedule);
+    update();
+  }
+</script>
