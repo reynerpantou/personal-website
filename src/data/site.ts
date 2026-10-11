@@ -16,20 +16,20 @@ export const serviceScope = [
 ];
 
 export const highlights = [
-  { label: 'Commerce growth', summary: 'Search · Ads · Promotions', results: [
-    ['+18.5% search GMV', 'Integration, May vs. April 2024'],
-    ['+11.06% search GMV', 'High-value-user coupon experiment'],
-    ['+21.69% pseudo-ad DGMV', 'Separate 2025 ads experiment'],
+  { label: 'Commerce Growth', summary: 'Search · Ads · Promotions', results: [
+    ['+18.5% Search GMV', 'TikTok Search Platform Integration'],
+    ['+11.06% Search GMV', 'High-Value User Coupon Experiment'],
+    ['+21.69% Pseudo Ad DGMV', 'Separate Ads Experiment'],
   ] },
-  { label: 'Operating efficiency', summary: 'Cost · Latency · Resources', results: [
-    ['$86.8K/year lower hosting cost', 'Search API migration, −54.68%'],
-    ['$24K/month Elasticsearch savings', 'Combined team program, −40%'],
-    ['350 ms lower page latency', 'Migration: 1,200 → 850 ms'],
+  { label: 'Operating Efficiency', summary: 'Cost · Latency · Resources', results: [
+    ['$288K/year Elasticsearch Savings', 'Annualized from $24K/month · Combined team program'],
+    ['−54.68% API-Layer Infrastructure Cost', 'ByteCloud Migration & Service Improvements'],
+    ['350 ms Lower Page Latency', 'Migration: 1,200 → 850 ms'],
   ] },
-  { label: 'Production delivery', summary: 'Integration · Migration · Governance', results: [
-    ['Three API-layer services', 'Search API, Search Provider, Search Pack'],
-    ['Zero reported cutover downtime', 'API migration and provider transition'],
-    ['Urgent policy fix in under one hour', '2024 P0 incident response'],
+  { label: 'Production Delivery', summary: 'Integration · Migration · Governance', results: [
+    ['Three API-Layer Services', 'Search API, Search Provider, Search Pack'],
+    ['Zero Reported Cutover Downtime', 'API migration and provider transition'],
+    ['Urgent Policy Fix in Under One Hour', 'P0 incident response'],
   ] },
 ];
 
@@ -56,7 +56,7 @@ export const experience = [
       ['Search surfaces', 'Handled product cards, advertisements, filters, sorting, and fine-ranking behavior across Search Result Page, store page, grocery, discovery, and other surfaces.'],
       ['Retrieval & relevance', 'Worked on retrieval, fine-ranking boosts and deboosts, NLP, and blacklist handling.'],
       ['Ingestion', 'Limited ingestion-service contributions to process product information before Elasticsearch indexing.'],
-      ['Delivery & quality', 'Coordinated migrations across more than 14 squads, built reusable query and cache abstractions, strengthened integration testing, and supported production operations.'],
+      ['Delivery & quality', 'Coordinated cross-department endpoint migrations, built reusable query and cache abstractions, strengthened integration testing, and supported production operations.'],
     ],
   },
 ];
@@ -74,13 +74,13 @@ export const projects = [
     intro: 'Core engineer for the API-layer integration between Tokopedia and TikTok Shop search, with direct ownership of filter contracts and implementation. I later led the search-provider RPC and traffic-boost integration and extended the API experience across search surfaces.',
     context: 'The initial online integration had a deadline of one month or less. Tokopedia’s complex filters and existing shopping experience had to work with a different search engine, service contract, and experimentation platform.',
     metrics: [
-      { value: '+18.5%', label: 'Search GMV', context: 'May vs. April, 2024' },
+      { value: '+18.5%', label: 'Search GMV', context: 'TikTok Search Platform Integration' },
       { value: '+13.21%', label: 'Search OPMS', context: 'Same monthly comparison' },
-      { value: '+24.32%', label: 'Search unique visitors', context: 'Same monthly comparison' },
+      { value: '+24.32%', label: 'Search Unique Visitors', context: 'Same monthly comparison' },
     ],
     business: [
-      'The 2024 integration report recorded search GMV growth of 18.5%, monthly buying users of 12.55%, and unique visitors of 24.32% in May versus April.',
-      'Later store-card integration reported GMV improvements of 4.5–6.6%. Desktop integration reported a 2.63% increase in search GMV per search user. These are separate initiatives and measurement scopes.',
+      'The 2024 integration report recorded Search GMV growth of 18.5%, monthly buying users of 12.55%, and unique visitors of 24.32% in May versus April.',
+      'Later store-card integration reported GMV improvements of 4.5–6.6%. Desktop integration reported a 2.63% increase in Search GMV per search user. These are separate initiatives and measurement scopes.',
     ],
     technical: [
       'Delivered the initial online integration within a month and migrated the subsequent search-provider flow with zero reported downtime.',
@@ -112,12 +112,12 @@ export const projects = [
     intro: 'Owned re-architecture and cutover of the search API layer for the GCP-to-ByteCloud migration. The service boundaries were Search API for user-facing orchestration, Search Provider for engine aggregation, and Search Pack for item and component packing. I took the new services through stress testing and full rollout.',
     context: 'The existing search service mixed API orchestration, engine integration, and product-card logic. Moving platforms also created an opportunity to separate responsibilities and make changes easier to test, deploy, and diagnose.',
     metrics: [
-      { value: '−54.68%', label: 'Annual hosting cost', context: 'Reported before/after search API cost' },
-      { value: '−350 ms', label: 'Search Result Page latency', context: '1,200 ms to 850 ms' },
-      { value: '0', label: 'Reported cutover downtime', context: 'Search service migration' },
+      { value: '−350 ms', label: 'Search Result Page Latency', context: '1,200 ms to 850 ms' },
+      { value: '−54.68%', label: 'API-Layer Infrastructure Cost', context: 'ByteCloud Migration & Service Improvements' },
+      { value: '0', label: 'Reported Cutover Downtime', context: 'Search service migration' },
     ],
     business: [
-      'Reported annual search API hosting cost fell by approximately $86,845. This reflects the combined effect of service improvements, re-architecture, and platform pricing.',
+      'Reported annual infrastructure cost for the Search API layer fell by approximately $86,845. This is a combined before/after result of ByteCloud pricing, service improvements, and re-architecture; it does not isolate the savings from engineering changes.',
       'Kept search product, shop-page product, and shop-query functionality available through the migration.',
     ],
     technical: [
@@ -150,12 +150,12 @@ export const projects = [
     intro: 'Engineering PIC for non-performing-product and index-mapping initiatives within the Elasticsearch cost optimization program. My related work improved cache efficiency and supported Elasticsearch upgrades and cluster scaling.',
     context: 'Expensive queries, unnecessary indexed fields, and oversized cache keys were increasing the operating cost of search. The changes needed to preserve relevance and production behavior while reducing infrastructure work.',
     metrics: [
-      { value: '−40%', label: 'Elasticsearch monthly spend', context: '2023 team optimization program' },
-      { value: '$24K', label: 'Monthly savings reported', context: 'Same program, not extra savings' },
-      { value: '11–21%', label: 'Lower Redis memory usage', context: '2022 filter-cache improvement' },
+      { value: '$288K/year', label: 'Annualized Elasticsearch Savings', context: '$24K/month × 12 · Combined team program' },
+      { value: '−40%', label: 'Elasticsearch Monthly Spend', context: 'Same team optimization program' },
+      { value: '11–21%', label: 'Lower Redis Memory Usage', context: 'Filter-cache improvement' },
     ],
     business: [
-      'The combined Elasticsearch optimization program reported a 40% reduction in monthly spend, equivalent to $24,000 per month.',
+      'The combined Elasticsearch optimization program reported a 40% reduction in monthly spend, equivalent to $24,000 per month or $288,000 per year when annualized. The annual figure is calculated from the monthly rate, rather than a separately reported full-year total.',
       'Cache improvements reduced reported Redis memory usage by 1.7–3.3 GB and removed related critical memory alerts during the observed period.',
     ],
     technical: [
@@ -174,7 +174,7 @@ export const projects = [
       ['Cache deliberately', 'Changed cache granularity and expiry behavior, then addressed the memory trade-off with hashes and shorter keys.'],
       ['Preserve behavior', 'Used comparison scripts, testing, and coordinated production execution for version and mapping changes.'],
     ],
-    evidence: '2022–2023 calibration records. The 40%, $24K, and 192-core results belong to the combined team program. Redis results are a separate initiative; latency comparisons retain their original scopes.',
+    evidence: '2022–2023 calibration records. The 40%, $24K/month, and 192-core results belong to the combined team program. $288K/year is annualized from the reported monthly savings. Redis results are a separate initiative; latency comparisons retain their original scopes.',
     takeaway: 'I connect performance work to infrastructure cost and production behavior, including the trade-offs introduced by an optimization.',
   },
   {
@@ -186,15 +186,15 @@ export const projects = [
     summary: 'Enabled TikTok advertising on Tokopedia search while preserving organic results and legacy ads.',
     tags: ['Go', 'Ads integration', 'Latency'],
     status: 'Delivered',
-    intro: 'Main search-side point of contact for TikTok Ad Manager integration and later pseudo-ad delivery. I owned design and implementation across the relevant search servers while coordinating with Ads engineering, Product, Frontend, and QA.',
+    intro: 'Main search-side point of contact for TikTok Ad Manager integration and later Pseudo Ad delivery. I owned design and implementation across the relevant search servers while coordinating with Ads engineering, Product, Frontend, and QA.',
     context: 'The advertising transition had to keep legacy Tokopedia ads discoverable, introduce TikTok ads, and preserve the organic search experience. Latency and independent pagination of organic and ad results were important constraints.',
     metrics: [
-      { value: '+21.69%', label: 'Pseudo-ad GMV', context: 'Reported 2025 experiment, rounded' },
-      { value: '+49.09%', label: 'Pseudo-ad delivery', context: 'Ad-send metric, same experiment' },
-      { value: '+6.67%', label: 'Normal-ad GMV', context: 'Separate reported ads result' },
+      { value: '+21.69%', label: 'Pseudo Ad GMV', context: 'Reported experiment, rounded' },
+      { value: '+49.09%', label: 'Pseudo Ad Delivery', context: 'Ad-send metric, same experiment' },
+      { value: '+6.67%', label: 'Normal Ad GMV', context: 'Separate reported ads result' },
     ],
     business: [
-      'The 2025 ads results reported pseudo-ad GMV growth of 21.692% and ad-send growth of 49.092%. Normal ads reported GMV growth of 6.665% and ad-send growth of 7.897%.',
+      'The 2025 ads results reported Pseudo Ad GMV growth of 21.692% and ad-send growth of 49.092%. Normal ads reported GMV growth of 6.665% and ad-send growth of 7.897%.',
       'Enabled the transition to TikTok Ad Manager while keeping Tokopedia’s existing ads discoverable.',
     ],
     technical: [
@@ -205,7 +205,7 @@ export const projects = [
     ownership: [
       'Owned search-side technical design, delivery planning, coordination, and implementation on both search-server sides.',
       'Initiated an ecommerce search RPC to allow early ad testing before the broader search API migration.',
-      'Owned strategies and implementation for pseudo-ad integration, working with Ads engineering and QA to validate delivery.',
+      'Owned strategies and implementation for Pseudo Ad integration, working with Ads engineering and QA to validate delivery.',
     ],
     focus: [
       ['A controlled transition', 'Kept old and new ad flows available during experiment-driven migration.'],
@@ -219,7 +219,7 @@ export const projects = [
     slug: 'commerce-experience',
     number: '05',
     icon: 'card',
-    title: 'Product cards that convert',
+    title: 'Product cards and promotions',
     category: 'Product and growth',
     summary: 'Standardized product-card contracts and delivered pricing, promotion, coupon, and discovery features.',
     tags: ['API design', 'Product growth', 'A/B rollout'],
@@ -227,15 +227,15 @@ export const projects = [
     intro: 'Owned the backend and cross-platform contracts for Tokopedia’s product-card redesign, then led search-side delivery of pricing, coupon, promotion, and discovery initiatives. The work connected backend implementation to measurable shopping outcomes.',
     context: 'Inconsistent product-card contracts and promotion logic created coordination and maintenance costs. New commerce benefits also had to appear correctly across search surfaces without introducing unacceptable latency or rollout risk.',
     metrics: [
-      { value: '+1.17%', label: 'Paid-order conversion', context: '2023 product-card redesign result' },
-      { value: '+11.06%', label: 'Search GMV', context: '2025 high-value-user coupon test' },
-      { value: '+10.87%', label: 'Average order value', context: 'Same coupon test' },
+      { value: '+5.7%', label: 'Main Orders per User', context: 'Bonus Promotion A/B Experiment' },
+      { value: '+3.1%', label: 'GMV per User', context: 'Same Bonus Promotion experiment' },
+      { value: '+11.06%', label: 'Search GMV', context: 'High-Value User Coupon Experiment' },
     ],
     business: [
-      'The 2023 product-card redesign reported paid-order conversion growth of 1.17%, add-to-cart conversion of 1.48%, and clicks per session of 3.05%.',
-      'The 2025 high-value-user coupon experiment reported search GMV growth of 11.06% and average order value of 10.87%. A separate query-based coupon experiment reported GMV per user growth of 1.91%.',
+      'The 2023 product-card redesign reported Paid-Order Conversion growth of 1.17%, Add-to-Cart Conversion of 1.48%, and clicks per session of 3.05%.',
+      'The 2025 high-value-user coupon experiment reported Search GMV growth of 11.06% and Average Order Value of 10.87%. A separate query-based coupon experiment reported GMV per User growth of 1.91%.',
       'The 2024 price-center integration reported GMV growth of 11% and conversion growth of 1.97%. Shop-page recommendation work separately reported shop GMV growth of 7.75%.',
-      'The supplied CV reports 2026 bonus-promotion A/B wins of GMV per user +3.1% and main orders per user +5.7%, plus instant/same-day delivery labels with order rate +1.1%.',
+      'The supplied CV reports Bonus Promotion A/B wins of GMV per User +3.1%, Main Orders per User +5.7%, and Payment Penetration +3.3%, plus Instant & Same-Day delivery labels with Order Rate +1.1%.',
     ],
     technical: [
       'Defined and implemented a new search product API contract with Android, iOS, desktop, and Ads teams. Organic and advertising product cards used the same contract.',
@@ -268,16 +268,17 @@ export const projects = [
     intro: 'Owned production changes whose success depended on more than the implementation: downstream migrations, search content controls, codebase modernization, testing standards, and engineering reviews.',
     context: 'Search served many downstream teams and multiple customer surfaces. Legacy contracts, policy-sensitive queries, and growing technical debt required explicit coordination, operational responsibility, and careful validation.',
     metrics: [
-      { value: '14+', label: 'Squads coordinated', context: '2023 endpoint migration' },
-      { value: '<1 hour', label: 'Urgent policy fix delivered', context: '2024 app-store compliance incident' },
-      { value: '−19%', label: 'CPU utilization', context: '2025 cleanup, 20-host fleet' },
+      { value: '14+', label: 'Departments Coordinated', context: 'API & Platform Migrations' },
+      { value: '<1 hour', label: 'Urgent Policy Fix Delivered', context: 'App-store compliance incident' },
+      { value: '−19%', label: 'CPU Utilization', context: 'Codebase cleanup, 20-host fleet' },
     ],
     business: [
       'Resolved a P0 search-content incident in under an hour; the performance record states that the fix prevented app-store blocking or removal.',
       'Enabled downstream teams to move off legacy contracts without reported downtime and supported campaign and production operations.',
     ],
     technical: [
-      'Migrated seven legacy endpoints and redirected seven GraphQL queries across more than 14 squads, using downstream trackers, migration guides, war rooms, and mitigation plans.',
+      'Coordinated API and platform migrations across more than 14 departments, including legacy endpoint migration in 2023 and the ByteCloud platform migration in 2025. Used downstream trackers, migration guides, war rooms, and mitigation plans.',
+      'The legacy endpoint migration retired seven endpoints and redirected seven GraphQL queries; these counts refer to that initiative rather than the later platform migration.',
       'Removed more than 100 feature flags, 25 experiments, and five dependencies. The 2025 record reports CPU utilization down 19%, memory down 17%, and disk down 22% across a 20-host fleet, with no P0/P1 regressions reported for that work.',
       'Implemented query and phrase blacklists, negative-category filtering, and PII redaction. Standardized integration-test naming, assertions, and test data.',
     ],
@@ -291,7 +292,7 @@ export const projects = [
       ['Operational accountability', 'Investigated escalations and shipped urgent safeguards while preserving search behavior.'],
       ['A stronger engineering baseline', 'Introduced reusable abstractions, testing standards, and review practices that other engineers could follow.'],
     ],
-    evidence: '2022–2023 calibration records, 2024–2025 performance records, and CV. The endpoint counts describe the 2023 migration; the separate 2022 deprecation is not added to that count. Resource reductions are reported fleet-level comparisons.',
+    evidence: '2022–2023 calibration records, 2024–2025 performance records, and CV. Department coordination spans legacy endpoint and ByteCloud platform migrations. The endpoint counts describe the legacy endpoint migration and are not added to later migrations. Resource reductions are reported fleet-level comparisons.',
     takeaway: 'I stay accountable for adoption, production safety, and the team’s ability to maintain what we ship.',
   },
 ];
