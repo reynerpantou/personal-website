@@ -97,7 +97,7 @@ test('experience explanations remain accessible without JavaScript and the portr
   assert.ok(home.some(node => node.tagName === 'a' && attr(node, 'href') === 'https://www.linkedin.com/in/reyner-pantou/'));
 });
 
-test('mobile navigation reaches every section and CV from every page', () => {
+test('mobile navigation reaches home sections consistently from every page', () => {
   for (const [route, elements] of pages) {
     const dock = elements.find(node => node.tagName === 'nav' && attr(node, 'aria-label') === 'Mobile navigation');
     assert.ok(dock, `${route}: missing persistent mobile navigation`);
@@ -105,11 +105,9 @@ test('mobile navigation reaches every section and CV from every page', () => {
     assert.deepEqual(links.map(node => pageText(nodes(node)).trim()), ['Home', 'Work', 'Career', 'CV', 'Contact']);
     for (const link of links) {
       const target = new URL(attr(link, 'href'), origin + route);
-      if (attr(link, 'data-section') === 'resume') assert.equal(target.pathname, '/cv/');
-      else {
-        assert.equal(target.pathname, '/');
-        assert.ok(pages.get('/').some(node => attr(node, 'id') === target.hash.slice(1)));
-      }
+      assert.equal(target.pathname, '/');
+      assert.equal(target.hash, `#${attr(link, 'data-section')}`);
+      assert.ok(pages.get('/').some(node => attr(node, 'id') === target.hash.slice(1)));
     }
     const current = links.filter(node => attr(node, 'aria-current'));
     assert.equal(current.length, 1);
