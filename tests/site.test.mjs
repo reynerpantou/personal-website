@@ -21,7 +21,7 @@ for (const file of files.filter(file => file.endsWith('.html'))) {
 }
 
 test('all portfolio and CV routes are emitted', () => {
-  for (const route of ['/', '/work/commerce-search/', '/work/financial-tracker/', '/cv/', '/404.html']) {
+  for (const route of ['/', '/work/commerce-search/', '/work/search-platform-migration/', '/work/search-performance/', '/work/search-monetization/', '/work/commerce-experience/', '/work/search-reliability/', '/cv/', '/404.html']) {
     assert.ok(pages.has(route), `Missing ${route}`);
   }
 });
@@ -59,19 +59,27 @@ for (const [route, elements] of pages) {
   });
 }
 
-test('homepage exposes every section and labels unfinished work', () => {
+test('homepage exposes every section and describes delivered ownership', () => {
   const home = pages.get('/');
   for (const id of ['work', 'experience', 'resume', 'about', 'contact']) assert.ok(home.some(node => attr(node, 'id') === id));
-  const project = pageText(pages.get('/work/financial-tracker/'));
-  assert.match(project, /work in progress, not a released product/);
+  assert.match(pageText(home), /technical owner of Tokopedia’s Search Result Page/i);
+  assert.match(pageText(home), /May vs\. April, 2024/);
+  const migration = pageText(pages.get('/work/search-platform-migration/'));
+  assert.match(migration, /1,200 ms to 850 ms/);
+  assert.match(migration, /What I owned/);
+  assert.match(migration, /Business impact/);
+  assert.match(migration, /Technical impact/);
 });
 
 test('only approved pages are published and public repository links are absent', async () => {
   assert.deepEqual([...pages.keys()].sort(), [
-    '/', '/404.html', '/cv/', '/work/commerce-search/', '/work/financial-tracker/',
+    '/', '/404.html', '/cv/', '/work/commerce-search/', '/work/search-platform-migration/',
+    '/work/search-performance/', '/work/search-monetization/', '/work/commerce-experience/',
+    '/work/search-reliability/',
   ].sort());
   for (const file of files.filter(file => /\.(html|xml)$/.test(file))) {
     assert.doesNotMatch(await readFile(file, 'utf8'), /github\.com\/reynerpantou/i);
+    assert.doesNotMatch(await readFile(file, 'utf8'), /financial.tracker/i);
   }
 });
 

@@ -19,7 +19,7 @@ npm run preview # Preview the static production build
 
 ## Content
 
-- `src/data/site.ts`: profile, verified email and LinkedIn, and work descriptions.
+- `src/data/site.ts`: profile, verified contact details, career ownership, and six delivered workstreams with scoped business and technical metrics.
 - `src/pages/index.astro`: introduction, selected work, experience, CV, about, and contact.
 - `src/pages/work/[slug].astro`: professional work and ongoing personal project detail pages.
 - `src/pages/cv.astro`: embedded CV viewer with direct-open and download fallbacks.
@@ -27,7 +27,9 @@ npm run preview # Preview the static production build
 - `src/layouts/Base.astro`: navigation, search and social metadata, and footer.
 - `src/styles/global.css`: responsive layouts, design tokens, focus styles, and reduced-motion support.
 
-The portfolio excludes take-home assignments and public GitHub repository listings or links. The CV PDF is retained unchanged. Replace `public/cv/reyner-pantou-cv.pdf` with a newer PDF to update every CV link and the embedded viewer in the next build. Keep this filename stable.
+The portfolio excludes take-home assignments, undeveloped personal projects, and public GitHub repository listings or links. Case studies separate direct ownership from reported team or experiment outcomes, and preserve measurement scope. Monthly comparisons are labeled separately from experiments; estimated engineering savings are identified as estimates.
+
+Career content is based on the provided 2022–2023 calibration decks, 2024–2025 performance notes, and CV. Raw internal documents, screenshots, and internal URLs are not published with the site. The supplied CV matches the existing PDF byte for byte and is retained unchanged. Replace `public/cv/reyner-pantou-cv.pdf` with a newer PDF to update every CV link and the embedded viewer in the next build. Keep this filename stable.
 
 ## Deploy on Cloudflare Pages
 
