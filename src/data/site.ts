@@ -5,9 +5,15 @@ export const profile = {
   email: 'reynerbpantou@gmail.com',
   linkedin: 'https://www.linkedin.com/in/reyner-pantou/',
   cv: '/cv/reyner-pantou-cv.pdf',
-  description: 'Senior backend engineer and former technical owner of Tokopedia’s Search Result Page. Five years delivering search integrations, platform migrations, and measurable commerce improvements with Go.',
-  introduction: 'Five years at Tokopedia and ByteDance. As technical owner of Tokopedia’s Search Result Page, I took backend initiatives from architecture and stakeholder alignment through implementation, production rollout, and experiment monitoring.',
+  description: 'Senior backend engineer specialising in the user-facing search API layer: Search API, Search Provider for engine aggregation, and Search Pack for item and component packing. Five years at Tokopedia and ByteDance with Go.',
+  introduction: 'Five years at Tokopedia and ByteDance. I owned the user-facing search API layer at TikTok: Search API, Search Provider for engine aggregation, and Search Pack for item and component packing. My responsibility ran from service design and stakeholder alignment through implementation, rollout, and monitoring.',
 };
+
+export const serviceScope = [
+  ['Search API', 'The user-facing API service that coordinates search requests and returns the search experience.'],
+  ['Search Provider', 'The engine aggregator that integrates TikTok organic and advertising engines.'],
+  ['Search Pack', 'The item and component packer that assembles product, video, store, advertising, and promotion content.'],
+];
 
 export const highlights = [
   { value: '+18.5%', label: 'Reported search GMV growth', context: 'May vs. April, 2024 integration' },
@@ -16,8 +22,10 @@ export const highlights = [
 ];
 
 export const responsibilities = [
-  ['Technical ownership', 'Set technical direction for the Search Result Page, define API contracts, and remain accountable from design review through rollout.'],
-  ['Architecture and delivery', 'Build search and advertising integrations, separate service responsibilities, and plan migrations with testing and rollback paths.'],
+  ['API-layer ownership', 'Define contracts and service boundaries for Search API, Search Provider, and Search Pack, and remain accountable from design review through rollout.'],
+  ['Search experience', 'Integrate organic and ad engines, filters, sorting, product/video/store cards, and promotion display, popups, and claims.'],
+  ['Tracking and governance', 'Handle engine impressions and event tracking, blacklists, interventions, and product-status and moderation handling.'],
+  ['Architecture and delivery', 'Separate API orchestration, engine aggregation, and component packing, and plan migrations with testing and rollback paths.'],
   ['Cross-team execution', 'Align Product, Backend, Frontend, QA, Data Science, Ads, and platform teams on dependencies, delivery plans, and changing priorities.'],
   ['Experiments and operations', 'Implement experiment controls and monitoring, operate rollouts, partner on result interpretation, and investigate production incidents.'],
   ['Engineering leadership', 'Write technical designs, review code, mentor engineers, interview candidates, and share platform knowledge across teams.'],
@@ -28,15 +36,25 @@ export const experience = [
     company: 'ByteDance',
     role: 'Senior Software Engineer · Search',
     dates: '2024 — 2026',
-    scope: 'Technical owner of Tokopedia’s Search Result Page',
-    description: 'Owned backend delivery across TikTok Shop search and ads integration, the migration to ByteCloud, and commerce experiments. Coordinated the full delivery cycle with Product, Frontend, QA, Data Science, and other engineering teams.',
+    scope: 'Search API, Search Provider, and Search Pack',
+    description: 'Owned the user-facing search API layer and its organic/ad engine integrations, ByteCloud migration, and commerce features. Coordinated service delivery with Product, Frontend, QA, Data Science, Ads, and platform teams.',
+    areas: [
+      'Search Provider: aggregate TikTok organic and advertising engines; handle engine impressions and event tracking.',
+      'Search API and Search Pack: filters and sorting; product, video, store, and advertising cards; promotion display, popups, and claims.',
+      'Governance: blacklists, interventions, and product-status and moderation handling.',
+    ],
   },
   {
     company: 'Tokopedia',
     role: 'Software Engineer · Search',
     dates: '2021 — 2023',
-    scope: 'Search platform, product contracts, and infrastructure',
+    scope: 'Search APIs, retrieval, and relevance features',
     description: 'Served as engineering PIC for search product-card redesign, Elasticsearch optimization, and migrations across more than 14 squads. Built reusable query and cache abstractions, strengthened integration testing, and supported production operations.',
+    areas: [
+      'Search APIs: product cards, advertisements, filters, sorting, and fine-ranking behavior across Search Result Page, store page, grocery, discovery, and other surfaces.',
+      'Retrieval, fine ranking with boost/deboost, NLP, and blacklist handling.',
+      'Limited ingestion-service contributions to process product information before Elasticsearch indexing.',
+    ],
   },
 ];
 
@@ -56,7 +74,7 @@ export const projects = [
     summary: 'Integrated a new search engine without losing Tokopedia’s filters, sorting, or commerce experience.',
     tags: ['Go', 'Search integration', 'Experimentation'],
     status: 'Delivered',
-    intro: 'Core engineer for the Tokopedia × TikTok Shop online search integration, with direct ownership of filter contracts and implementation. I later led the backend work for search-provider RPCs, traffic-boost integration, and additional search surfaces.',
+    intro: 'Core engineer for the API-layer integration between Tokopedia and TikTok Shop search, with direct ownership of filter contracts and implementation. I later led the search-provider RPC and traffic-boost integration and extended the API experience across search surfaces.',
     context: 'The initial online integration had a deadline of one month or less. Tokopedia’s complex filters and existing shopping experience had to work with a different search engine, service contract, and experimentation platform.',
     metrics: [
       { value: '+18.5%', label: 'Search GMV', context: 'May vs. April, 2024' },
@@ -83,18 +101,18 @@ export const projects = [
       ['Consistent discovery', 'Carried the integration across search surfaces while keeping pagination, sorting, and filter behavior coherent.'],
     ],
     evidence: 'Reported project outcomes from 2024–2025 performance records. The May-versus-April figures are a monthly comparison, not an isolated causal A/B result. Later store-card and desktop figures belong to separate experiments.',
-    takeaway: 'My ownership combined backend implementation with contract decisions, coordination, and rollout accountability across two platforms.',
+    takeaway: 'My ownership covered API-layer implementation, engine integration contracts, coordination, and rollout accountability across two platforms.',
   },
   {
     slug: 'search-platform-migration',
     number: '02',
     icon: 'platform',
-    title: 'A simpler search platform',
+    title: 'A simpler search API layer',
     category: 'Architecture and migration',
-    summary: 'Rebuilt the search API for ByteCloud and separated engine aggregation from commerce item mapping.',
+    summary: 'Migrated Search API to ByteCloud and separated Search Provider engine aggregation from Search Pack item and component packing.',
     tags: ['Go', 'Kitex', 'Cloud migration'],
     status: 'Delivered',
-    intro: 'Owned the search backend re-architecture and cutover plan for the GCP-to-ByteCloud migration. I then created dedicated services for search/ad aggregation and commerce item mapping, taking them through stress testing and full rollout.',
+    intro: 'Owned re-architecture and cutover of the search API layer for the GCP-to-ByteCloud migration. The service boundaries were Search API for user-facing orchestration, Search Provider for engine aggregation, and Search Pack for item and component packing. I took the new services through stress testing and full rollout.',
     context: 'The existing search service mixed API orchestration, engine integration, and product-card logic. Moving platforms also created an opportunity to separate responsibilities and make changes easier to test, deploy, and diagnose.',
     metrics: [
       { value: '−54.68%', label: 'Annual hosting cost', context: 'Reported before/after search API cost' },
@@ -107,16 +125,16 @@ export const projects = [
     ],
     technical: [
       'Reduced reported Search Result Page latency from 1,200 ms to 850 ms, a 350 ms reduction.',
-      'Built dedicated search/ad aggregation and commerce item-mapping services, enabling product-pack features to deploy independently of API orchestration.',
+      'Built Search Provider for organic/ad engine aggregation and Search Pack for item and component packing, enabling pack features to deploy independently of Search API.',
       'Created a shared service boilerplate, debugging utilities, dashboards, stress tests, and rollout monitoring. Performance records estimate two engineering days saved per engine or product-pack feature.',
     ],
     ownership: [
-      'Created the architecture, migration strategy, and cutover plan for the search backend.',
-      'Served as main point of contact for the new aggregation and item-mapping services, implementing them and monitoring the rollout to 100%.',
+      'Created the architecture, migration strategy, and cutover plan for the search API layer.',
+      'Served as main point of contact for Search Provider and Search Pack, implementing them and monitoring the rollout to 100%.',
       'Coordinated QA and Ads engineering to check both organic and advertising behavior during the transition.',
     ],
     focus: [
-      ['Service boundaries', 'Separated engine retrieval and ad aggregation from product-card enrichment, pricing, promotion, and labeling.'],
+      ['Service boundaries', 'Separated Search API orchestration, Search Provider engine aggregation, and Search Pack item/component assembly.'],
       ['Safe cutover', 'Planned migration steps and monitored search behavior across the affected surfaces.'],
       ['Operational clarity', 'Used service-specific dashboards and debug tools to make ownership and issue diagnosis clearer.'],
     ],
@@ -183,7 +201,7 @@ export const projects = [
       'Enabled the transition to TikTok Ad Manager while keeping Tokopedia’s existing ads discoverable.',
     ],
     technical: [
-      'Integrated the ad manager across the search API and search-provider flow, and introduced independent organic and advertising cursors.',
+      'Integrated the ad manager across Search API and Search Provider, introduced independent organic and advertising cursors, and handled engine impressions and event tracking.',
       'The CV reports limiting a projected 506 ms latency increase to 185 ms; the 2024 performance record separately confirms mitigation of the projected regression.',
       'Performance records estimate two to three engineering days saved when creating or maintaining the new ad flow.',
     ],
@@ -225,6 +243,7 @@ export const projects = [
     technical: [
       'Defined and implemented a new search product API contract with Android, iOS, desktop, and Ads teams. Organic and advertising product cards used the same contract.',
       'Integrated pricing and promotion across three search modules, proactively tested six APIs, and kept reported search latency below 550 ms for that integration.',
+      'Handled promotion display, popups, and claims, as well as product, video, store, and advertising-card assembly in the API layer.',
       'Implemented recommendation decompression, deduplication, and sorting, as well as configurable campaign banners and experiment controls.',
     ],
     ownership: [
@@ -267,7 +286,7 @@ export const projects = [
     ],
     ownership: [
       'PIC for downstream migration planning and execution, following up consumers and tracking compatibility through production cutover.',
-      'Main point of contact for the urgent content-policy fix and subsequent search-governance work.',
+      'Main point of contact for the urgent content-policy fix and API-layer search governance: blacklists, interventions, and product-status and moderation handling.',
       'Reviewed code, mentored engineers, interviewed backend candidates, and presented twice at the Architecture Review Board. Received a ByteDance Spot Award in 2025.',
     ],
     focus: [

@@ -62,7 +62,11 @@ for (const [route, elements] of pages) {
 test('homepage exposes every section and describes delivered ownership', () => {
   const home = pages.get('/');
   for (const id of ['work', 'experience', 'resume', 'about', 'contact']) assert.ok(home.some(node => attr(node, 'id') === id));
-  assert.match(pageText(home), /technical owner of Tokopedia’s Search Result Page/i);
+  assert.match(pageText(home), /user-facing search API layer/i);
+  assert.match(pageText(home), /Search Provider.*engine aggregator/is);
+  assert.match(pageText(home), /Search Pack.*item and component packer/is);
+  assert.match(pageText(home), /Limited ingestion-service contributions/i);
+  assert.doesNotMatch(pageText(home), /technical owner of Tokopedia’s Search Result Page/i);
   assert.match(pageText(home), /May vs\. April, 2024/);
   const migration = pageText(pages.get('/work/search-platform-migration/'));
   assert.match(migration, /1,200 ms to 850 ms/);

@@ -29,6 +29,8 @@ npm run preview # Preview the static production build
 
 The portfolio excludes take-home assignments, undeveloped personal projects, and public GitHub repository listings or links. Case studies separate direct ownership from reported team or experiment outcomes, and preserve measurement scope. Monthly comparisons are labeled separately from experiments; estimated engineering savings are identified as estimates.
 
+Ownership is scoped to the user-facing search API layer at TikTok: Search API, Search Provider (engine aggregator), and Search Pack (item/component packer). The company-specific experience distinguishes this service ownership from Tokopedia work on search APIs across surfaces, retrieval, fine ranking, NLP, blacklists, and limited pre-indexing ingestion contributions. It does not imply ownership of the entire search organization or all search engines.
+
 Career content is based on the provided 2022–2023 calibration decks, 2024–2025 performance notes, and CV. Raw internal documents, screenshots, and internal URLs are not published with the site. The supplied CV matches the existing PDF byte for byte and is retained unchanged. Replace `public/cv/reyner-pantou-cv.pdf` with a newer PDF to update every CV link and the embedded viewer in the next build. Keep this filename stable.
 
 ## Deploy on Cloudflare Pages

@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Arrow from '../components/Arrow.astro';
 import WorkIcon from '../components/WorkIcon.astro';
-import { profile, projects, highlights, responsibilities, experience, leadership } from '../data/site';
+import { profile, projects, highlights, responsibilities, serviceScope, experience, leadership } from '../data/site';
 const toolkit = ['Go', 'Elasticsearch', 'Redis', 'PostgreSQL', 'Kafka', 'gRPC'];
 ---
 <Base home>
@@ -10,7 +10,7 @@ const toolkit = ['Go', 'Elasticsearch', 'Redis', 'PostgreSQL', 'Kafka', 'gRPC'];
     <div class="hero-copy">
       <p class="eyebrow">Senior backend engineer · Jakarta, Indonesia</p>
       <h1 id="intro-title">Hi, I’m <span>Reyner.</span></h1>
-      <p class="hero-subtitle">I own search systems<br class="desktop-break" /> <span>from design to production.</span></p>
+      <p class="hero-subtitle">I build search APIs<br class="desktop-break" /> <span>from design to production.</span></p>
       <p class="hero-description">{profile.introduction}</p>
       <div class="hero-actions"><a class="button button-primary" href="#work">Explore my work <Arrow /></a><a class="button button-secondary" href="/cv/">View CV <Arrow diagonal /></a></div>
     </div>
@@ -20,12 +20,12 @@ const toolkit = ['Go', 'Elasticsearch', 'Redis', 'PostgreSQL', 'Kafka', 'gRPC'];
 <span class="code-keyword">engineer</span> := <span class="code-type">Engineer</span>{'{'}
   Name:  <span class="code-string">"Reyner Pantou"</span>,
   Owns: []<span class="code-type">string</span>{'{'}
-    <span class="code-string">"Search delivery"</span>,
-    <span class="code-string">"Platform migrations"</span>,
-    <span class="code-string">"Production reliability"</span>,
+    <span class="code-string">"Search API"</span>,
+    <span class="code-string">"Search Provider"</span>,
+    <span class="code-string">"Search Pack"</span>,
   {'}'},
 {'}'}</code></pre>
-      <p class="sr-only">My work includes technical ownership of search delivery, platform migrations, and production reliability.</p>
+      <p class="sr-only">My TikTok service ownership covered Search API, Search Provider for engine aggregation, and Search Pack for item and component packing.</p>
       <div class="profile-note"><span aria-hidden="true">↳</span> Go · Search · Distributed systems</div>
     </aside>
     <div class="hero-history"><span class="eyebrow">Previously at</span><span><span class="company-tokopedia">Tokopedia</span> <span class="separator" aria-hidden="true">/</span> <span class="company-bytedance">ByteDance</span></span><span class="history-detail">2021 — 2026</span></div>
@@ -49,14 +49,15 @@ const toolkit = ['Go', 'Elasticsearch', 'Redis', 'PostgreSQL', 'Kafka', 'gRPC'];
 
   <section id="experience" class="section" aria-labelledby="experience-title">
     <div class="section-heading"><div><p class="eyebrow">02 / Experience</p><h2 id="experience-title">Ownership through delivery.</h2></div><p>Architecture, execution,<br class="desktop-break" /> and production accountability.</p></div>
-    {experience.map(item => <article class="experience-row"><div class="experience-meta"><span class="experience-date">{item.dates}</span><span class="muted">{item.company}</span></div><div class="experience-body"><h3>{item.scope}</h3><p class="role">{item.role}</p><p>{item.description}</p></div></article>)}
+    {experience.map(item => <article class="experience-row"><div class="experience-meta"><span class="experience-date">{item.dates}</span><span class="muted">{item.company}</span></div><div class="experience-body"><h3>{item.scope}</h3><p class="role">{item.role}</p><p>{item.description}</p><ul class="experience-areas">{item.areas.map(area => <li>{area}</li>)}</ul></div></article>)}
+    <div class="ownership-section"><h3>My service scope at TikTok</h3><p class="section-intro">The user-facing search API layer: three services connecting engine results to the shopping experience.</p><ul class="responsibility-list">{serviceScope.map(([title, body]) => <li><h4>{title}</h4><p>{body}</p></li>)}</ul></div>
     <div class="ownership-section"><h3>What I’m responsible for</h3><ul class="responsibility-list">{responsibilities.map(([title, body]) => <li><h4>{title}</h4><p>{body}</p></li>)}</ul></div>
     <div class="toolkit"><p class="eyebrow">Tools I work with</p><ul aria-label="Engineering toolkit">{toolkit.map(tool => <li>{tool}</li>)}</ul></div>
   </section>
 
   <section id="about" class="section" aria-labelledby="about-title">
     <div class="section-heading"><div><p class="eyebrow">03 / About</p><h2 id="about-title">An engineer who owns the outcome.</h2></div></div>
-    <div class="about-columns"><div class="about-copy"><p>I’m a senior backend engineer based in Jakarta, originally from Surabaya. My strongest work sits where search architecture, commerce goals, and production constraints meet.</p><p>I stay involved beyond implementation: aligning downstream teams, making migrations observable, operating experiments, and helping other engineers maintain what we ship.</p><p>Go is my primary language. I’ve worked with Elasticsearch and distributed services throughout my career, and I contribute through technical designs, code review, mentoring, and incident response.</p></div><aside class="education-card"><span class="eyebrow">Education</span><h3>Computer Science</h3><p>Petra Christian University</p><p class="muted">B.Sc. · 2017 — 2021</p><div class="recognition"><span class="eyebrow">Recognition</span><h3>ByteDance Spot Award</h3><p>2025 · Delivery and ownership across business-critical initiatives</p></div></aside></div>
+    <div class="about-columns"><div class="about-copy"><p>I’m a senior backend engineer based in Jakarta, originally from Surabaya. My strongest work sits where search API architecture, commerce goals, and production constraints meet.</p><p>I stay involved beyond implementation: aligning downstream teams, making migrations observable, operating experiments, and helping other engineers maintain what we ship.</p><p>Go is my primary language. At Tokopedia, I also worked on retrieval, fine-ranking boosts and deboosts, NLP, and limited product-ingestion changes. At TikTok, my ownership centred on Search API, Search Provider, and Search Pack.</p></div><aside class="education-card"><span class="eyebrow">Education</span><h3>Computer Science</h3><p>Petra Christian University</p><p class="muted">B.Sc. · 2017 — 2021</p><div class="recognition"><span class="eyebrow">Recognition</span><h3>ByteDance Spot Award</h3><p>2025 · Delivery and ownership across business-critical initiatives</p></div></aside></div>
     <dl class="leadership-grid" aria-label="Engineering leadership evidence">{leadership.map(item => <div><dt>{item.label}</dt><dd>{item.value}</dd></div>)}</dl>
   </section>
 
